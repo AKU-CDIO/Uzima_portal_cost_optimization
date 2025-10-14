@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Uzima VM Control Portal</title>
+
+<!-- Fonts & Icons -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
+<style>
+:root{
+  --navy:#0a2647; --navy-600:#174ea6;
+  --teal:#0f766e; --blue:#2563eb; --amber:#d97706;
+  --gray-900:#0f172a; --gray-700:#334155; --gray-500:#64748b;
+  --surface:#ffffff; --surface-2:#f8fafc; --ring: rgba(37,99,235,.25);
+  --accent-shadow: rgba(2,6,23,.28);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,Ubuntu,sans-serif;
+  color:var(--gray-900);
+  background:linear-gradient(180deg,#ffffff 0%,#eef7ff 100%);
+  display:flex;flex-direction:column;
+}
+
+/* Header (fixed) */
+header{
+  position:sticky; top:0; z-index:30;
+  background:linear-gradient(135deg,var(--navy) 0%, var(--navy-600) 100%);
+  color:#fff; box-shadow:0 8px 24px rgba(0,0,0,.18);
+}
+.header-inner{
+  max-width:1100px; margin:0 auto; padding:10px 20px;
+  display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:12px;
+}
+.header-left{display:flex;align-items:center;gap:10px}
+.header-left img{height:44px}
+.header-center{display:flex;flex-direction:column;align-items:center;line-height:1.25;text-align:center}
+.header-title{font:700 1.15rem/1.2 'Poppins',sans-serif; letter-spacing:.2px}
+.header-sub{font-size:.9rem; opacity:.9}
+.header-right{position:relative;display:flex;align-items:center;gap:12px}
+.avatar{
+  width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
+  font-weight:800;background:#1f3b7a;color:#fff;border:1px solid rgba(255,255,255,.35);cursor:pointer;
+}
+.menu{
+  position:absolute; right:0; top:54px; min-width:200px; background:#fff; color:#0f172a;
+  border:1px solid rgba(0,0,0,.08); border-radius:12px; box-shadow:0 18px 40px -12px rgba(10,15,45,.35);
+  display:none; overflow:hidden; z-index:40;
+}
+.menu.show{display:block}
+.menu .mi{
+  display:flex; gap:10px; align-items:center; padding:10px 12px; cursor:pointer; font-weight:700;
+}
+.menu .mi:hover{background:#f6faff}
+.menu .muted{padding:8px 12px; font-size:.85rem; color:#475569}
+
+/* Main */
+main{flex:1; display:flex; justify-content:center; padding:26px 14px}
+.container{width:100%; max-width:980px}
+.card{
+  background:var(--surface); border:1px solid rgba(0,0,0,.06); border-radius:16px;
+  box-shadow:0 28px 60px -26px rgba(10,15,45,.2); overflow:hidden;
+}
+
+/* Accordions */
+.accordion{width:100%}
+.acc-item + .acc-item{border-top:1px solid rgba(0,0,0,.06)}
+.acc-header{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:14px 16px; cursor:pointer; user-select:none;
+  background:linear-gradient(180deg,#ffffff 0%, #fbfdff 100%);
+}
+.acc-header:hover{background:#f6faff}
+.acc-title{display:flex; align-items:center; gap:.6rem; font:700 1rem/1.2 'Poppins',sans-serif; color:var(--navy)}
+.acc-title i{color:var(--blue)}
+.acc-chevron{transition:transform .2s ease; color:#334155}
+.acc-item.open .acc-chevron{transform:rotate(90deg)}
+.acc-panel{padding:16px; display:none; background:linear-gradient(180deg,#ffffff 0%,#ffffff 60%,#f7fbff 100%)}
+.acc-item.open .acc-panel{display:block; animation:slide .2s ease}
+@keyframes slide{from{opacity:0; transform:translateY(-6px)} to{opacity:1; transform:translateY(0)}}
+
+/* Status + Controls */
+.status{
+  display:flex; align-items:center; gap:.6rem; min-height:48px;
+  padding:12px; border-radius:12px; background:var(--surface-2);
+  border:1px solid rgba(0,0,0,.06); box-shadow:0 1px 0 rgba(0,0,0,.03) inset;
+}
+.status.ok      {border-left:6px solid var(--teal); background:linear-gradient(90deg,#f0fdfa 0%,#f8ffff 100%); color:var(--teal)}
+.status.stopped {border-left:6px solid var(--amber); background:linear-gradient(90deg,#fff7ed 0%,#fff 100%); color:#92400e}
+.spinner{width:18px;height:18px;border:3px solid #cbd5e1;border-top:3px solid var(--blue);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.count{font-weight:700;margin-left:.25rem}
+.controls{display:flex; gap:12px; flex-wrap:wrap; margin-top:12px}
+.btn{
+  flex:1 1 180px; display:flex; align-items:center; justify-content:center; gap:.55rem;
+  padding:.9rem 1rem; border:none; border-radius:12px; color:#fff; font-weight:700; font-size:1rem; cursor:pointer;
+  transition:transform .15s ease, box-shadow .15s ease; outline:0;
+}
+.btn:focus{box-shadow:0 0 0 4px var(--ring)}
+.btn.primary{background:var(--blue)}
+.btn.warn{background:var(--amber)}
+.btn:disabled{opacity:.6; cursor:not-allowed}
+.btn:hover:not(:disabled){transform:translateY(-1px); box-shadow:0 14px 30px -14px var(--accent-shadow)}
+
+/* Logs */
+.loglist{
+  max-height:220px; overflow:auto; display:flex; flex-direction:column; gap:6px; padding:10px;
+  background:#ffffff; border:1px solid rgba(0,0,0,.06); border-radius:12px;
+}
+.logitem{
+  font-size:.85rem; color:#111827; line-height:1.35;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+}
+.userline{margin-top:10px; font-size:.9rem; color:var(--gray-700); display:flex; gap:10px; align-items:center}
+
+/* Admin table */
+.table{width:100%; border-collapse:separate; border-spacing:0 8px}
+.row{
+  background:#fbfdff; border:1px solid rgba(0,0,0,.06); border-radius:10px; padding:10px;
+  display:grid; grid-template-columns:1.2fr .6fr .7fr .7fr; gap:10px; align-items:center;
+}
+.row .role select{width:100%; padding:.45rem; border:1px solid rgba(0,0,0,.12); border-radius:8px; background:#fff}
+.row .actions button{padding:.45rem .6rem; border:none; border-radius:8px; font-weight:700; cursor:pointer; color:#fff}
+.btn-approve{background:var(--teal)}
+.btn-reject{background:var(--amber)}
+.badge-status{display:inline-block;padding:.2rem .5rem;border-radius:999px;font-size:.75rem;font-weight:700}
+.badge-pending{background:#fef3c7;color:#92400e}
+.badge-approved{background:#ccfbf1;color:#065f46}
+
+/* Modals */
+.modal{position:fixed; inset:0; background:rgba(10,38,71,.45); display:none; align-items:center; justify-content:center; padding:18px; z-index:40}
+.modal.show{display:flex}
+.modal-card{width:100%; max-width:460px; background:#fff; border-radius:16px; box-shadow:0 24px 60px -20px rgba(0,0,0,.35); overflow:hidden}
+.modal-head{background:linear-gradient(135deg,#1f3b7a,#2563eb); color:#fff; padding:14px 16px; font-weight:700; display:flex; justify-content:space-between; align-items:center}
+.modal-body{padding:16px}
+.form{display:grid; gap:10px}
+.form label{font-size:.9rem; color:var(--gray-700)}
+.form input, .form select, .form textarea{width:100%; padding:.65rem .7rem; border:1px solid rgba(0,0,0,.12); border-radius:10px; background:#fff}
+.form input:focus, .form select:focus, .form textarea:focus{outline:none; box-shadow:0 0 0 4px var(--ring)}
+.modal-actions{display:flex; gap:10px; margin-top:12px}
+.btn-dark{background:#0b122f; color:#fff; border:none; padding:.7rem 1rem; border-radius:10px; font-weight:700; cursor:pointer}
+.btn-ghost{background:#e2e8f0; color:#0b122f; border:none; padding:.7rem 1rem; border-radius:10px; font-weight:700; cursor:pointer}
+
+/* Footer */
+footer{
+  background:linear-gradient(135deg,var(--navy) 0%, var(--navy-600) 100%);
+  color:rgba(255,255,255,.92);
+  padding:16px 20px; font-size:.92rem; box-shadow:0 -6px 18px rgba(0,0,0,.12);
+}
+.footer-inner{
+  max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+}
+.links{display:flex; gap:16px; flex-wrap:wrap}
+.links a{color:rgba(255,255,255,.9); text-decoration:none; font-weight:700}
+.links a:hover{color:#fff; text-decoration:underline}
+
+@media (max-width:740px){
+  .row{grid-template-columns:1fr 1fr; grid-auto-rows:auto}
+  .header-center{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header role="banner" aria-label="Uzima VM Header">
+  <div class="header-inner">
+    <div class="header-left">
+      <img src="Uzima_logo.png" alt="Uzima Data Science logo">
+    </div>
+    <div class="header-center">
+      <div class="header-title">Uzima VM Control Portal</div>
+      <div class="header-sub">In collaboration with Aga Khan University Hospital</div>
+    </div>
+    <div class="header-right">
+      <div id="avatar" class="avatar" title="Open menu" aria-haspopup="menu">U</div>
+      <div id="userMenu" class="menu" role="menu" aria-label="User menu">
+        <div id="menuName" class="muted">Not signed in</div>
+        <div id="miSignIn" class="mi"><i class="fa-solid fa-right-to-bracket"></i> Sign in</div>
+        <div id="miSignUp" class="mi"><i class="fa-solid fa-user-plus"></i> Sign up</div>
+        <div id="miProfile" class="mi" style="display:none"><i class="fa-solid fa-user-gear"></i> Profile</div>
+        <div id="miLogout" class="mi" style="display:none"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log out</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main>
+  <div class="container">
+    <section class="card" aria-label="Uzima control card">
+      <div class="accordion" id="accordion">
+        <!-- VM STATUS -->
+        <div class="acc-item open" id="sec-status">
+          <div class="acc-header" data-acc="status" role="button" tabindex="0" aria-expanded="true">
+            <div class="acc-title"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i> VM Status</div>
+            <i class="fa-solid fa-chevron-right acc-chevron" aria-hidden="true"></i>
+          </div>
+          <div class="acc-panel" aria-live="polite">
+            <div id="statusBox" class="status stopped" role="status">
+              <div id="statusSpinner" class="spinner" style="display:none" aria-hidden="true"></div>
+              <span id="statusText">VM is stopped</span><span id="count" class="count"></span>
+            </div>
+            <div class="controls" role="group" aria-label="VM controls">
+              <button id="btnStart" class="btn primary" aria-label="Start VM"><i class="fa-solid fa-power-off"></i> Start VM</button>
+              <button id="btnStop"  class="btn warn"    aria-label="Stop VM"><i class="fa-solid fa-stop"></i> Stop VM</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- LOGS -->
+        <div class="acc-item" id="sec-logs">
+          <div class="acc-header" data-acc="logs" role="button" tabindex="0" aria-expanded="false">
+            <div class="acc-title"><i class="fa-regular fa-rectangle-list" aria-hidden="true"></i> Activity Log</div>
+            <i class="fa-solid fa-chevron-right acc-chevron" aria-hidden="true"></i>
+          </div>
+          <div class="acc-panel">
+            <div id="loglist" class="loglist" aria-label="Last 30 actions"></div>
+            <div class="userline">
+              <span id="userLineText">Not signed in</span>
+              <span id="userLineSep" style="opacity:.6;display:none">|</span>
+              <a href="#" id="userLogout" style="display:none">Log out</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- USER MGMT -->
+        <div class="acc-item" id="sec-admin">
+          <div class="acc-header" data-acc="admin" role="button" tabindex="0" aria-expanded="false">
+            <div class="acc-title"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> User Management (Admins)</div>
+            <i class="fa-solid fa-chevron-right acc-chevron" aria-hidden="true"></i>
+          </div>
+          <div class="acc-panel">
+            <p class="subtitle">Approve new users, handle requests, and assign roles.</p>
+            <div id="userTable"></div>
+          </div>
+        </div>
+
+        <!-- ABOUT -->
+        <div class="acc-item" id="sec-about">
+          <div class="acc-header" data-acc="about" role="button" tabindex="0" aria-expanded="false">
+            <div class="acc-title"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> About Uzima VM Portal</div>
+            <i class="fa-solid fa-chevron-right acc-chevron" aria-hidden="true"></i>
+          </div>
+          <div class="acc-panel">
+            <p style="color:var(--gray-700);margin-bottom:8px">
+              The Uzima VM Control Portal provides a secure, role-based interface for managing research and data workloads in the Uzima Data Science Lab, in collaboration with Aga Khan University Hospital.
+              VM lifecycle actions are coordinated to optimize resources and maintain stability.
+            </p>
+            <p style="color:var(--gray-700);margin-bottom:8px">
+              For assistance or access requests, contact the CDIO team:
+              <a href="mailto:rais.muhammad@aku.edu?subject=Uzima%20VM%20Support">rais.muhammad@aku.edu</a>,
+              <a href="mailto:derick.imbati@aku.edu?subject=Uzima%20VM%20Support">derick.imbati@aku.edu</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer role="contentinfo">
+  <div class="footer-inner">
+    <div>&copy; <span id="year"></span> Uzima Data Science · Aga Khan University Hospital</div>
+    <nav class="links" aria-label="Footer links">
+      <a href="https://uzimadatascience.org/about/hub-overview/" target="_blank" rel="noopener">Uzima</a>
+      <a href="mailto:rais.muhammad@aku.edu,derick.imbati@aku.edu?subject=Uzima%20VM%20Support">Contact</a>
+      <a href="https://www.aku.edu/Pages/home.aspx" target="_blank" rel="noopener">AKU Site</a>
+      <a href="https://www.aku.edu/data-innovation-office/Pages/our-people.aspx" target="_blank" rel="noopener">CDIO Team</a>
+    </nav>
+  </div>
+</footer>
+
+<!-- AUTH MODAL -->
+<div id="authModal" class="modal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <div class="modal-head">
+      <span id="authTitle">Sign in</span>
+      <a href="#" id="authClose" class="btn-ghost" aria-label="Close">Close</a>
+    </div>
+    <div class="modal-body">
+      <div class="form">
+        <label id="nameLabel" style="display:none">Full name</label>
+        <input id="nameInput" placeholder="Jane Doe" style="display:none" autocomplete="name">
+        <label>Email</label>
+        <input id="emailInput" placeholder="you@aku.edu" type="email" autocomplete="username">
+        <label>Password <span class="muted" id="pwHint"></span></label>
+        <input id="passInput" placeholder="••••••••" type="password" autocomplete="current-password">
+        <div class="muted" id="authHint"></div>
+      </div>
+      <div class="modal-actions">
+        <button id="authPrimary" class="btn-dark">Continue</button>
+        <button id="authSwap" class="btn-ghost">Need an account?</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE MODAL -->
+<div id="profileModal" class="modal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="profileTitle">
+    <div class="modal-head">
+      <span id="profileTitle">Profile</span>
+      <a href="#" id="profileClose" class="btn-ghost" aria-label="Close profile">Close</a>
+    </div>
+    <div class="modal-body">
+      <div class="form">
+        <label>Full name</label>
+        <input id="pName" placeholder="Your name" autocomplete="name">
+        <label>Email (read-only)</label>
+        <input id="pEmail" disabled>
+        <label>Change password (optional)</label>
+        <input id="pPass" type="password" placeholder="New password (min 8 chars)">
+        <label>Request higher access</label>
+        <select id="pRequest">
+          <option value="">-- Select a role to request --</option>
+          <option value="contributor">Contributor</option>
+          <option value="admin">Admin</option>
+        </select>
+        <label>Message to admins (optional)</label>
+        <textarea id="pMsg" rows="3" placeholder="Add context for your request"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button id="btnSaveProfile" class="btn-dark">Save</button>
+        <button id="btnRequestRole" class="btn-ghost">Send request</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================== AZURE BLOB CONFIG ================== */
+const ACCOUNT_URL = "https://uzimavmcontrol.blob.core.windows.net";
+const CONTAINER   = "uzima-vm-control-data";
+const SAS_QUERY = "sv=2024-11-04&ss=bfqt&srt=sco&sp=rwdlacupitfx&se=2028-10-14T15:22:11Z&st=2025-10-14T07:07:11Z&spr=https,http&sig=bBPplen07eOg17ErlNM6Ml4%2BWyDgPIf9p3AQUyVKShI%3D";
+const BLOB = { USERS:"users.json", LOGS:"logs.json", STATE:"state.json", REQUESTS:"requests.json" };
+
+// Retry configuration
+const MAX_RETRIES = 3;
+const RETRY_DELAY = 1000; // 1 second initial delay
+
+/* ================== VM CONFIG ================== */
+const START_WEBHOOK_URL = "https://c1b86629-139b-420c-83ac-ee0d882dfe70.webhook.ne.azure-automation.net/webhooks?token=XJnARFlkbW%2fbxeBAToejKDsE%2beqs2NnGbgOmlJVwOQ4%3d";
+const STOP_WEBHOOK_URL = "https://c1b86629-139b-420c-83ac-ee0d882dfe70.webhook.ne.azure-automation.net/webhooks?token=ewb5VijdGH1x2OACTGkQBzqOIOm%2fa8EaRHug6vogKAk%3d";
+// Increased timeouts to handle potential Azure Automation delays
+const TRANSITION_MS = 5*60*1000;      // 5 minutes for VM operations
+const FRESH_WINDOW  = 45*60*1000;     // 45 minutes for status freshness
+const MAX_LOGS      = 30;
+
+/* ================== ELEMENTS ================== */
+document.getElementById('year').textContent = new Date().getFullYear();
+
+const avatar = document.getElementById('avatar');
+const userMenu = document.getElementById('userMenu');
+const menuName = document.getElementById('menuName');
+const miSignIn = document.getElementById('miSignIn');
+const miSignUp = document.getElementById('miSignUp');
+const miProfile = document.getElementById('miProfile');
+const miLogout = document.getElementById('miLogout');
+
+const loglist = document.getElementById('loglist');
+const userLineText = document.getElementById('userLineText');
+const userLineSep = document.getElementById('userLineSep');
+const userLogoutLink = document.getElementById('userLogout');
+
+const statusBox = document.getElementById('statusBox');
+const statusSpinner = document.getElementById('statusSpinner');
+const statusText = document.getElementById('statusText');
+const countEl = document.getElementById('count');
+const btnStart = document.getElementById('btnStart');
+const btnStop = document.getElementById('btnStop');
+
+const userTable = document.getElementById('userTable');
+
+/* Auth modal elements */
+const authModal = document.getElementById('authModal');
+const authTitle = document.getElementById('authTitle');
+const authClose = document.getElementById('authClose');
+const nameLabel = document.getElementById('nameLabel');
+const nameInput = document.getElementById('nameInput');
+const emailInput = document.getElementById('emailInput');
+const passInput = document.getElementById('passInput');
+const authHint = document.getElementById('authHint');
+const authPrimary = document.getElementById('authPrimary');
+const authSwap = document.getElementById('authSwap');
+const pwHint = document.getElementById('pwHint');
+
+/* Profile modal elements */
+const profileModal = document.getElementById('profileModal');
+const profileClose = document.getElementById('profileClose');
+const pName = document.getElementById('pName');
+const pEmail = document.getElementById('pEmail');
+const pPass = document.getElementById('pPass');
+const pRequest = document.getElementById('pRequest');
+const pMsg = document.getElementById('pMsg');
+
+/* ================== SESSION (LOCAL ONLY) ================== */
+const SESSION_KEY = "uzima_session";
+function getSession(){ try{const v=localStorage.getItem(SESSION_KEY); return v?JSON.parse(v):null;}catch{return null;} }
+function setSession(obj){ localStorage.setItem(SESSION_KEY, JSON.stringify(obj)); }
+function clearSession(){ localStorage.removeItem(SESSION_KEY); }
+
+/* ================== AZURE BLOB HELPERS ================== */
+function blobUrl(blob, extra=""){ return `${ACCOUNT_URL}/${CONTAINER}/${blob}?${SAS_QUERY}${extra}`; }
+function containerUrl(){ return `${ACCOUNT_URL}/${CONTAINER}?restype=container&comp=create&${SAS_QUERY}`; }
+
+// Helper function for retry logic with exponential backoff
+async function withRetry(operation, maxRetries = MAX_RETRIES, delay = RETRY_DELAY) {
+  let lastError;
+  
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      return await operation();
+    } catch (error) {
+      lastError = error;
+      console.warn(`Attempt ${attempt} failed:`, error);
+      
+      if (attempt < maxRetries) {
+        const waitTime = delay * Math.pow(2, attempt - 1);
+        console.log(`Retrying in ${waitTime}ms...`);
+        await new Promise(resolve => setTimeout(resolve, waitTime));
+      }
+    }
+  }
+  
+  throw lastError || new Error('Operation failed after retries');
+}
+
+async function ensureContainer(){
+  return withRetry(async () => {
+    const response = await fetch(containerUrl(), { 
+      method: 'PUT',
+      headers: { 'x-ms-version': '2024-11-04' }
+    });
+    
+    // 201 = Created, 409 = Already exists
+    if (![201, 409].includes(response.status)) {
+      throw new Error(`Container operation failed with status ${response.status}`);
+    }
+    return true;
+  }).catch(error => {
+    console.error('Failed to ensure container exists:', error);
+    return false;
+  });
+}
+async function getJSON(blob) {
+  return withRetry(async () => {
+    const response = await fetch(blobUrl(blob), { 
+      method: 'GET',
+      cache: 'no-store',
+      headers: { 'x-ms-version': '2024-11-04' }
+    });
+    
+    if (response.status === 404) return null;
+    if (!response.ok) {
+      throw new Error(`GET ${blob} failed with status ${response.status}`);
+    }
+    
+    return await response.json();
+  }).catch(error => {
+    console.error(`Failed to get ${blob}:`, error);
+    return null;
+  });
+}
+async function putJSON(blob, data) {
+  return withRetry(async () => {
+    const response = await fetch(blobUrl(blob), {
+      method: 'PUT',
+      headers: { 
+        'x-ms-blob-type': 'BlockBlob',
+        'Content-Type': 'application/json',
+        'x-ms-version': '2024-11-04'
+      },
+      body: JSON.stringify(data)
+    });
+    
+    if (!response.ok) {
+      throw new Error(`PUT ${blob} failed with status ${response.status}`);
+    }
+    
+    return true;
+  }).catch(error => {
+    console.error(`Failed to save ${blob}:`, error);
+    return false;
+  });
+}
+
+/* ================== IN-MEMORY STORE ================== */
+const store = { users:[], logs:[], state:{state:'stopped', lastChange:0}, requests:[] };
+function nowStr(){ return new Date().toLocaleString(); }
+function initials(s){ const t=(s||'U').trim(); if(!t.includes(' ')) return t.substring(0,2).toUpperCase(); return t.split(' ').map(x=>x[0]).slice(0,2).join('').toUpperCase(); }
+
+/* ===== Reconcile default admins (self-healing) ===== */
+async function reconcileDefaultAdmins() {
+  let changed = false;
+  function upsertAdmin(email, name, defaultPass) {
+    const i = store.users.findIndex(u => (u.email||'').toLowerCase() === email.toLowerCase());
+    if (i === -1) {
+      store.users.push({
+        id: (crypto?.randomUUID?.() || 'u' + Math.random().toString(36).slice(2,10)),
+        name, email, pass: defaultPass, role:'admin', status:'approved', createdAt: Date.now()
+      });
+      changed = true;
+    } else {
+      const u = store.users[i];
+      if (u.role !== 'admin' || u.status !== 'approved') {
+        u.role = 'admin'; u.status = 'approved'; changed = true;
+      }
+    }
+  }
+  upsertAdmin('rais.muhammad@aku.edu','Rais Muhammad','pass@123');
+  upsertAdmin('derick.imbati@aku.edu','Derick Imbati','pass@123');
+  if (changed) await putJSON(BLOB.USERS, store.users);
+}
+
+/* ================== LOAD & SAVE ================== */
+async function loadAll(){
+  await ensureContainer();
+  store.users    = await getJSON(BLOB.USERS)    || [];
+  await reconcileDefaultAdmins();               // ensures admins always present
+  store.logs     = await getJSON(BLOB.LOGS)     || [];
+  store.state    = await getJSON(BLOB.STATE)    || {state:'stopped', lastChange:0};
+  store.requests = await getJSON(BLOB.REQUESTS) || [];
+}
+async function saveUsers(){ return putJSON(BLOB.USERS, store.users); }
+async function saveLogs(){ return putJSON(BLOB.LOGS, store.logs.slice(0,MAX_LOGS)); }
+async function saveState(){ return putJSON(BLOB.STATE, store.state); }
+async function saveRequests(){ return putJSON(BLOB.REQUESTS, store.requests); }
+
+/* ================== AUTH (MODAL) ================== */
+let authMode = 'signin';
+function openAuth(mode){
+  authMode = mode;
+  authModal.classList.add('show');
+  authTitle.textContent = mode==='signin' ? 'Sign in' : 'Create account';
+  authPrimary.textContent = mode==='signin' ? 'Sign in' : 'Create account';
+  authSwap.textContent = mode==='signin' ? 'Need an account?' : 'Have an account?';
+  nameLabel.style.display = nameInput.style.display = (mode==='signup') ? 'block' : 'none';
+  pwHint.textContent = mode==='signup' ? '(min 8 characters)' : '';
+  emailInput.value=''; passInput.value=''; nameInput.value=''; authHint.textContent='';
+}
+function closeAuth(){ authModal.classList.remove('show'); }
+authClose.addEventListener('click', e=>{e.preventDefault(); closeAuth();});
+authSwap.addEventListener('click', ()=> openAuth(authMode==='signin'?'signup':'signin'));
+
+authPrimary.addEventListener('click', async ()=>{
+  const email = (emailInput.value||'').trim().toLowerCase();
+  const pass  = (passInput.value||'');
+  if(!email || !pass || (authMode==='signup' && !nameInput.value.trim())){
+    authHint.textContent='Please fill all fields.'; return;
+  }
+  if(authMode==='signup' && pass.length<8){
+    authHint.textContent='Password must be at least 8 characters.'; return;
+  }
+
+  const existing = store.users.find(u => (u.email||'').toLowerCase() === email);
+
+  if(authMode==='signup'){
+    if(existing){ authHint.textContent='Email already exists.'; return; }
+    const user = {
+      id:(crypto?.randomUUID?.() || 'u' + Math.random().toString(36).slice(2,10)),
+      name:nameInput.value.trim(), email, pass, role:'viewer', status:'pending', createdAt:Date.now()
+    };
+    store.users.push(user); await saveUsers();
+    setSession({userId:user.id});
+    await addLog('Signup','Pending approval', user);
+    closeAuth(); refreshUI();
+  }else{
+    if(!existing || existing.pass !== pass){
+      authHint.textContent='Invalid credentials.'; return;
+    }
+    setSession({userId:existing.id});
+    await addLog('Sign in','Success', existing);
+    closeAuth(); refreshUI();
+  }
+});
+
+/* Avatar menu */
+function toggleMenu(){ userMenu.classList.toggle('show'); }
+function closeMenu(){ userMenu.classList.remove('show'); }
+avatar.addEventListener('click', ()=>{ toggleMenu(); });
+document.addEventListener('click', (e)=>{ if(!e.target.closest('.header-right')) closeMenu(); });
+
+miSignIn.addEventListener('click', ()=>{ openAuth('signin'); closeMenu(); });
+miSignUp.addEventListener('click', ()=>{ openAuth('signup'); closeMenu(); });
+miProfile.addEventListener('click', ()=>{ openProfile(); closeMenu(); });
+miLogout.addEventListener('click', async ()=>{
+  const u = currentUser();
+  clearSession();
+  await addLog('Sign out','Success', u||undefined);
+  closeMenu(); refreshUI();
+});
+
+/* ================== PROFILE ================== */
+function currentUser(){
+  const s = getSession(); if(!s) return null;
+  return store.users.find(u=>u.id===s.userId) || null;
+}
+function openProfile(){
+  const u = currentUser(); if(!u){ openAuth('signin'); return; }
+  pName.value = u.name||''; pEmail.value = u.email||''; pPass.value=''; pRequest.value=''; pMsg.value='';
+  profileModal.classList.add('show');
+}
+function closeProfile(){ profileModal.classList.remove('show'); }
+profileClose.addEventListener('click', e=>{ e.preventDefault(); closeProfile(); });
+
+document.getElementById('btnSaveProfile').addEventListener('click', async ()=>{
+  const u = currentUser(); if(!u) return;
+  u.name = pName.value.trim() || u.name;
+  if(pPass.value){
+    if(pPass.value.length<8){ alert('Password must be at least 8 characters.'); return; }
+    u.pass = pPass.value;
+  }
+  await saveUsers();
+  await addLog('Profile updated','Success', u);
+  closeProfile(); refreshUI();
+});
+
+document.getElementById('btnRequestRole').addEventListener('click', async ()=>{
+  const u = currentUser(); if(!u) return;
+  const targetRole = pRequest.value;
+  if(!targetRole){ alert('Select a role to request.'); return; }
+  const msg = (pMsg.value||'').trim();
+  store.requests.unshift({id:(crypto?.randomUUID?.() || 'r'+Math.random().toString(36).slice(2,10)), userId:u.id, targetRole, msg, ts:Date.now(), status:'open'});
+  await saveRequests();
+  await addLog('Permission request', `${u.email}: → ${targetRole}`, u);
+  alert('Your request has been sent to admins.');
+  closeProfile();
+  renderUserTable();
+});
+
+/* ================== LOGS ================== */
+async function addLog(action, result, byUser){
+  const by = byUser ? byUser.email : (currentUser()?.email || 'anonymous');
+  store.logs.unshift({ts:nowStr(), action, result, by});
+  store.logs = store.logs.slice(0, MAX_LOGS);
+  await saveLogs();
+  renderLogs();
+}
+function renderLogs(){
+  const logs = store.logs;
+  loglist.innerHTML = logs.length
+    ? logs.map(l=>`<div class="logitem">[${l.ts}] ${l.action} — ${l.result} <span style="opacity:.75">(${l.by})</span></div>`).join('')
+    : '<div class="logitem">No activity yet.</div>';
+}
+
+/* ================== VM STATE & ACTIONS ================== */
+function setStatusUI(state, msg, loading = false) {
+  statusBox.classList.remove('ok', 'stopped');
+  
+  // Only add status class if we have a valid state
+  if (state === 'running') statusBox.classList.add('ok');
+  if (state === 'stopped') statusBox.classList.add('stopped');
+  
+  statusSpinner.style.display = loading ? 'inline-block' : 'none';
+  
+  // Show welcome message when no specific status is set
+  if (!state && !msg) {
+    statusText.textContent = 'Welcome to Uzima VM Control';
+  } else {
+    statusText.textContent = msg || `VM is ${state}`;
+  }
+  
+  countEl.textContent = '';
+  
+  const u = currentUser();
+  const role = u?.role || 'viewer';
+  const approved = (u?.status === 'approved');
+  
+  // Disable buttons during loading
+  if (loading) {
+    btnStart.disabled = btnStop.disabled = true;
+  } else {
+    // Only enable start if VM is not running and user has permission
+    btnStart.disabled = !(approved && (role === 'admin' || role === 'contributor') && state !== 'running');
+    // Only enable stop if VM is running and user is admin
+    btnStop.disabled = !(approved && role === 'admin' && state === 'running');
+  }
+}
+async function finalizeState(state){
+  store.state.state = state;
+  store.state.lastChange = Date.now();
+  await saveState();
+  setStatusUI(state, `VM is ${state}`);
+}
+function startCountdown(ms,onDone){
+  const start=Date.now();
+  function tick(){
+    const remain=Math.max(0, ms-(Date.now()-start));
+    const mm=String(Math.floor(remain/60000));
+    const ss=String(Math.floor((remain%60000)/1000)).padStart(2,'0');
+    countEl.textContent=` (${mm}:${ss})`;
+    if(remain<=0){ clearInterval(t); countEl.textContent=''; onDone(); }
+  }
+  tick(); const t=setInterval(tick,1000);
+}
+async function callWebhook(url, actionName) {
+    const startTime = Date.now();
+    const logError = async (message, error = null) => {
+        console.error(`[${actionName}] ${message}`, error || '');
+        await addLog(
+            `${actionName} VM`, 
+            `${message}${error ? `: ${error.message || error}` : ''}`, 
+            currentUser()
+        );
+    };
+
+    try {
+        // Try direct fetch first
+        let response;
+        try {
+            console.log(`[${actionName}] Attempting direct request to:`, url);
+            response = await fetch(url, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                mode: 'cors'
+            });
+        } catch (directError) {
+            console.log(`[${actionName}] Direct request failed, trying with CORS proxy`);
+            // Fallback to CORS proxy
+            try {
+                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+                console.log(`[${actionName}] Using CORS proxy:`, proxyUrl);
+                response = await fetch(proxyUrl, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'}
+                });
+            } catch (proxyError) {
+                await logError('Both direct and proxy requests failed', proxyError);
+                throw new Error('Network error - could not reach the server. Please check your connection.');
+            }
+        }
+
+        const responseTime = Date.now() - startTime;
+        console.log(`[${actionName}] Response (${response.status}) in ${responseTime}ms`);
+        
+        const responseText = await response.text();
+        console.log(`[${actionName}] Response body:`, responseText);
+        
+        if (!response.ok) {
+            throw new Error(`Server responded with status ${response.status}: ${responseText || 'No details'}`);
+        }
+
+        await logError('Request successful');
+        return responseText;
+        
+    } catch (error) {
+        await logError('Request failed', error);
+        throw error;
+    }
+}
+async function startVM() {
+    const u = currentUser();
+    if (!u || u.status !== 'approved') {
+        await addLog('Start VM', 'Access denied: Not authorized', u);
+        return;
+    }
+    if (!(u.role === 'admin' || u.role === 'contributor')) {
+        await addLog('Start VM', 'Access denied: Insufficient permissions', u);
+        return;
+    }
+    
+    // Prevent starting if already running
+    if (store.state.state === 'running') {
+        setStatusUI('running', 'VM is already running');
+        return;
+    }
+
+    try {
+        setStatusUI('starting', 'Starting VM...', true);
+        await addLog('Start VM', 'Initiating VM start...', u);
+        
+        // Add a timeout for the webhook call (increased to 2 minutes for Azure Automation)
+        const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Request timed out after 2 minutes')), 120000)
+        );
+        
+        // Race the webhook call against the timeout
+        await Promise.race([
+            callWebhook(START_WEBHOOK_URL, 'Start'),
+            timeoutPromise
+        ]);
+        
+        // If we get here, the webhook call succeeded
+        await addLog('Start VM', 'VM start command sent successfully', u);
+        
+        // Show a countdown while waiting for VM to start
+        let secondsLeft = 30;
+        const countdown = setInterval(() => {
+            if (secondsLeft > 0) {
+                statusText.textContent = `Starting VM... (${secondsLeft}s)`;
+                secondsLeft--;
+            } else {
+                clearInterval(countdown);
+            }
+        }, 1000);
+        
+        // Finalize after delay
+        setTimeout(async () => {
+            clearInterval(countdown);
+            await finalizeState('running');
+            await addLog('Start VM', 'VM is now running', u);
+        }, 30000);
+        
+    } catch (error) {
+        console.error('Error in startVM:', error);
+        setStatusUI('error', `Failed to start VM: ${error.message}`);
+        await addLog('Start VM', `Failed: ${error.message}`, u);
+    }
+}
+async function stopVM() {
+    const u = currentUser();
+    if (!u || u.status !== 'approved') {
+        await addLog('Stop VM', 'Access denied: Not authorized', u);
+        return;
+    }
+    if (u.role !== 'admin') {
+        await addLog('Stop VM', 'Access denied: Admin role required', u);
+        return;
+    }
+    
+    // Prevent stopping if already stopped
+    if (store.state.state !== 'running') {
+        setStatusUI(store.state.state || 'stopped', store.state.state ? `VM is already ${store.state.state}` : 'VM is not running');
+        return;
+    }
+
+    try {
+        setStatusUI('stopping', 'Stopping VM...', true);
+        await addLog('Stop VM', 'Initiating VM stop...', u);
+        
+        // Add a timeout for the webhook call (increased to 2 minutes for Azure Automation)
+        const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Request timed out after 2 minutes')), 120000)
+        );
+        
+        // Race the webhook call against the timeout
+        await Promise.race([
+            callWebhook(STOP_WEBHOOK_URL, 'Stop'),
+            timeoutPromise
+        ]);
+        
+        // If we get here, the webhook call succeeded
+        await addLog('Stop VM', 'VM stop command sent successfully', u);
+        
+        // Show a countdown while waiting for VM to stop
+        let secondsLeft = 30;
+        const countdown = setInterval(() => {
+            if (secondsLeft > 0) {
+                statusText.textContent = `Stopping VM... (${secondsLeft}s)`;
+                secondsLeft--;
+            } else {
+                clearInterval(countdown);
+            }
+        }, 1000);
+        
+        // Finalize after delay
+        setTimeout(async () => {
+            clearInterval(countdown);
+            await finalizeState('stopped');
+            await addLog('Stop VM', 'VM is now stopped', u);
+        }, 30000);
+        
+    } catch (error) {
+        console.error('Error in stopVM:', error);
+        setStatusUI('error', `Failed to stop VM: ${error.message}`);
+        await addLog('Stop VM', `Failed: ${error.message}`, u);
+    }
+}
+btnStart.onclick = startVM;
+btnStop.onclick  = stopVM;
+
+/* ================== ADMIN: APPROVALS & ROLES ================== */
+function renderUserTable(){
+  const m = currentUser();
+  const sec = document.getElementById('sec-admin');
+  if(!m || m.role!=='admin'){ sec.style.display='none'; return; }
+  sec.style.display='block';
+
+  const list = [...store.users].sort((a,b)=>a.createdAt-b.createdAt);
+  const reqs = [...store.requests].sort((a,b)=>b.ts-a.ts);
+
+  const rowsUsers = list.map(u=>`
+    <div class="row">
+      <div>
+        <div style="font-weight:700">${u.name||'(no name)'}</div>
+        <div style="font-size:.9rem; color:#1f2937">${u.email}</div>
+      </div>
+      <div>
+        <span class="badge-status ${u.status==='approved'?'badge-approved':'badge-pending'}">${u.status==='approved'?'Approved':'Pending'}</span>
+      </div>
+      <div class="role">
+        <select aria-label="Role for ${u.email}" data-id="${u.id}" ${u.status!=='approved'?'disabled':''}>
+          <option value="viewer" ${u.role==='viewer'?'selected':''}>viewer</option>
+          <option value="contributor" ${u.role==='contributor'?'selected':''}>contributor</option>
+          <option value="admin" ${u.role==='admin'?'selected':''}>admin</option>
+        </select>
+      </div>
+      <div class="actions">
+        ${u.status!=='approved'
+          ? `<button class="btn-approve" data-approve="${u.id}">Approve</button>
+             <button class="btn-reject"  data-reject="${u.id}">Reject</button>`
+          : `<button class="btn-reject"  data-remove="${u.id}">Remove</button>`
+        }
+      </div>
+    </div>
+  `).join('') || '<div class="subtitle">No users yet.</div>';
+
+  const rowsReqs = reqs.length ? `
+    <h4 style="margin:10px 0 6px;font-family:Poppins,sans-serif;color:#0f172a">Role Requests</h4>
+    <div class="table">
+      ${reqs.map(r=>{
+        const u=list.find(x=>x.id===r.userId)||{};
+        return `
+        <div class="row">
+          <div>
+            <div style="font-weight:700">${u.name||'(unknown user)'}</div>
+            <div style="font-size:.9rem;color:#1f2937">${u.email||''}</div>
+            <div style="font-size:.85rem;color:#334155;opacity:.9">${r.msg?('“'+r.msg+'”'):'(no message)'}</div>
+          </div>
+          <div><span class="badge-status ${r.status==='open'?'badge-pending':'badge-approved'}">${r.status}</span></div>
+          <div class="role"><span style="font-weight:700">${r.targetRole}</span></div>
+          <div class="actions">
+            <button class="btn-approve" data-approve-req="${r.id}">Approve</button>
+            <button class="btn-reject"  data-reject-req="${r.id}">Reject</button>
+          </div>
+        </div>`}).join('')}
+    </div>
+  ` : '';
+
+  userTable.innerHTML = `
+    <h4 style="margin:0 0 6px;font-family:Poppins,sans-serif;color:#0f172a">Users</h4>
+    <div class="table">${rowsUsers}</div>
+    ${rowsReqs}
+  `;
+
+  // Wire user actions
+  userTable.querySelectorAll('[data-approve]').forEach(b=> b.onclick=async ()=>{
+    const id=b.getAttribute('data-approve'); const u=store.users.find(x=>x.id===id); if(!u) return;
+    u.status='approved'; if(u.role==='viewer') u.role='contributor'; await saveUsers();
+    await addLog('User approved', u.email, m); renderUserTable(); refreshUI();
+  });
+  userTable.querySelectorAll('[data-reject]').forEach(b=> b.onclick=async ()=>{
+    const id=b.getAttribute('data-reject'); store.users = store.users.filter(x=>x.id!==id); await saveUsers();
+    await addLog('User rejected/removed', id, m); renderUserTable(); refreshUI();
+  });
+  userTable.querySelectorAll('[data-remove]').forEach(b=> b.onclick=async ()=>{
+    const id=b.getAttribute('data-remove'); const u=store.users.find(x=>x.id===id);
+    store.users = store.users.filter(x=>x.id!==id); await saveUsers();
+    await addLog('User removed', u?.email||id, m); renderUserTable();
+    if(currentUser()?.id===id){ clearSession(); refreshUI(); }
+  });
+  userTable.querySelectorAll('select[data-id]').forEach(sel=> sel.onchange=async ()=>{
+    const id=sel.getAttribute('data-id'); const u=store.users.find(x=>x.id===id); if(!u) return;
+    const prev=u.role; u.role=sel.value; await saveUsers();
+    await addLog('Role changed', `${u.email}: ${prev} → ${u.role}`, m); refreshUI();
+  });
+
+  // Wire request approvals
+  userTable.querySelectorAll('[data-approve-req]').forEach(b=> b.onclick=async ()=>{
+    const rid=b.getAttribute('data-approve-req'); const r=store.requests.find(x=>x.id===rid); if(!r) return;
+    r.status='approved';
+    const u=store.users.find(x=>x.id===r.userId); if(u){ u.role=r.targetRole; u.status='approved'; await saveUsers(); }
+    await saveRequests(); await addLog('Role request approved', `${u?.email||''} → ${r.targetRole}`, m);
+    renderUserTable(); refreshUI();
+  });
+  userTable.querySelectorAll('[data-reject-req]').forEach(b=> b.onclick=async ()=>{
+    const rid=b.getAttribute('data-reject-req'); const r=store.requests.find(x=>x.id===rid); if(!r) return;
+    r.status='rejected'; await saveRequests(); await addLog('Role request rejected', `req:${rid}`, m);
+    renderUserTable();
+  });
+}
+
+/* ================== ACCORDION & UI ================== */
+function setupAccordion(){
+  document.querySelectorAll('.acc-header').forEach(h=>{
+    h.addEventListener('click', ()=>{
+      const item = h.parentElement;
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.acc-item').forEach(i=>i.classList.remove('open'));
+      if(!isOpen) item.classList.add('open');
+      h.setAttribute('aria-expanded', String(!isOpen));
+    });
+    h.addEventListener('keydown', (e)=>{
+      if(e.key==='Enter' || e.key===' '){ e.preventDefault(); h.click(); }
+    });
+  });
+}
+function refreshAvatar(){
+  const u = currentUser();
+  avatar.textContent = initials(u ? (u.name || u.email) : 'Uzima');
+  menuName.textContent = u ? `${u.name||u.email} · ${u.role}${u.status!=='approved'?' (pending)':''}` : 'Not signed in';
+  miProfile.style.display = u ? '' : 'none';
+  miLogout.style.display  = u ? '' : 'none';
+}
+function setUserLine(){
+  const u = currentUser();
+  if(!u){
+    userLineText.textContent='Not signed in';
+    userLineSep.style.display='none';
+    userLogoutLink.style.display='none';
+  }else{
+    userLineText.textContent = `${u.name||u.email} · ${u.role}`;
+    userLineSep.style.display='';
+    userLogoutLink.style.display='';
+  }
+}
+userLogoutLink.addEventListener('click', async (e)=>{
+  e.preventDefault(); const u=currentUser(); clearSession(); await addLog('Sign out','Success', u||undefined); refreshUI();
+});
+function setStatusFromStore(){
+  const st = store.state.state || 'stopped';
+  const last = store.state.lastChange || 0;
+  const fresh = (Date.now()-last) < FRESH_WINDOW;
+  const final = (st==='running' && fresh) ? 'running' : 'stopped';
+  if(final==='running') setStatusUI('running','VM is running');
+  else setStatusUI('stopped','VM is stopped');
+}
+function renderAll(){
+  renderLogs();
+  setUserLine();
+  refreshAvatar();
+  renderUserTable();
+  setStatusFromStore();
+}
+/* Compatibility wrapper so older calls still work */
+function refreshUI(){ renderAll(); }
+
+function setupMenuShortcuts(){
+  document.addEventListener('keydown', (e)=>{
+    if(e.key==='Escape'){ authModal.classList.remove('show'); profileModal.classList.remove('show'); }
+  });
+}
+
+/* ================== INIT ================== */
+(async function init(){
+  setupAccordion();
+  setupMenuShortcuts();
+  await loadAll();
+  renderAll();
+})();
+</script>
+</body>
+</html>

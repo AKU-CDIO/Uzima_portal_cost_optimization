@@ -1,0 +1,18 @@
+name: fitbit-data-backup-env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.8
+  - pip
+  - setuptools
+  - wheel
+  - unixodbc          # keep this
+  - pyodbc            # move pyodbc to conda (works with unixodbc)
+  - pyarrow
+  - pip:
+      - azure-identity
+      - azure-storage-blob==12.15.0
+      - pandas
+      - tqdm
+      - python-dotenv
