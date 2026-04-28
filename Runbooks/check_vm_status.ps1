@@ -10,7 +10,7 @@ $ErrorActionPreference = "Stop"
 # Default values
 $SubscriptionId = "a5d4ffbe-d287-4dd1-86c9-f1214fe751d6"
 $ResourceGroupName = "CDIOUZIMA"
-$VMName = "UZIMA"
+$VMName = "uzima-copied"
 $JobId = $null
 $CallbackUrl = $null
 

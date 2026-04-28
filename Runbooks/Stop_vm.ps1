@@ -15,7 +15,7 @@ try {
     Write-Output "Successfully connected with managed identity"
 
     # Get the VM
-    $vm = Get-AzVM -ResourceGroupName "cdiouzima" -Name "uzima" -Status -ErrorAction Stop
+    $vm = Get-AzVM -ResourceGroupName "cdiouzima" -Name "uzima-copied" -Status -ErrorAction Stop
     Write-Output "Current VM status: $($vm.Statuses[1].Code)"
 
     # Check if VM is already stopped
@@ -24,7 +24,7 @@ try {
     } else {
         # Stop the VM
         Write-Output "Stopping VM..."
-        Stop-AzVM -ResourceGroupName "cdiouzima" -Name "uzima" -Force -ErrorAction Stop
+        Stop-AzVM -ResourceGroupName "cdiouzima" -Name "uzima-copied" -Force -ErrorAction Stop
         Write-Output "VM stop command sent successfully"
     }
 }
