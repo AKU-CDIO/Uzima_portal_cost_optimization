@@ -15,7 +15,7 @@ try {
     Write-Output "Successfully connected with managed identity"
 
     # Get the VM
-    $vm = Get-AzVM -ResourceGroupName "cdiouzima" -Name "uzima" -Status -ErrorAction Stop
+    $vm = Get-AzVM -ResourceGroupName "cdiouzima" -Name "uzima-copied" -Status -ErrorAction Stop
     Write-Output "Current VM status: $($vm.Statuses[1].Code)"
 
     # Check if VM is already running
@@ -24,7 +24,7 @@ try {
     } else {
         # Start the VM
         Write-Output "Starting VM..."
-        Start-AzVM -ResourceGroupName "cdiouzima" -Name "uzima" -ErrorAction Stop
+        Start-AzVM -ResourceGroupName "cdiouzima" -Name "uzima-copied" -ErrorAction Stop
         Write-Output "VM start command sent successfully"
     }
 }
