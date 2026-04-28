@@ -77,29 +77,107 @@
   | **Logging** | Advanced | Basic | Enable NSG Flow Logs |
   | **Cost** | $936/month | Free | N/A |
 
-- **Migration Steps**:
-  1. Document current firewall rules
-  2. Create equivalent NSG rules
-  3. Test in non-production first
-  4. Implement monitoring:
-     ```powershell
-     # Enable NSG Flow Logs
-     $workspace = Get-AzOperationalInsightsWorkspace -ResourceGroupName cdiouzima
-     $storageAccount = Get-AzStorageAccount -ResourceGroupName cdiouzima -Name uzimalogs
-     $nsg = Get-AzNetworkSecurityGroup -ResourceGroupName cdiouzima -Name "Uzima-NSG"
-     
-     Set-AzNetworkWatcherConfigFlowLog `
-       -NetworkWatcherName "NetworkWatcher_northeurope" `
-       -ResourceGroupName "NetworkWatcherRG" `
-       -TargetResourceId $nsg.Id `
-       -StorageAccountId $storageAccount.Id `
-       -EnableFlowLog $true `
-       -FormatType "JSON" `
-       -FormatVersion 2 `
-       -EnableTrafficAnalytics `
-       -WorkspaceResourceId $workspace.ResourceId `
-       -WorkspaceGUID $workspace.CustomerId
-     ```
+- **Implementation Steps**:
+  ```powershell
+  # 1. Check current firewall rules
+  $firewall = Get-AzFirewall -Name "CDIOUZIMA-Firewall" -ResourceGroupName "CDIOUZIMA"
+  $firewall.NetworkRuleCollections | Format-Table -Property Name, Priority, RuleCollectionType
+  $firewall.ApplicationRuleCollections | Format-Table -Property Name, Priority, RuleCollectionType
+  
+  # 2. Create equivalent NSG rules (example for RDP/SSH)
+  $nsg = Get-AzNetworkSecurityGroup -Name "Uzima-NSG" -ResourceGroupName "CDIOUZIMA" -ErrorAction SilentlyContinue
+  
+  if (-not $nsg) {
+      $vnet = Get-AzVirtualNetwork -Name "CDIOUZIMA" -ResourceGroupName "CDIOUZIMA"
+      $subnet = $vnet.Subnets | Where-Object { $_.Name -eq "default" }
+      
+      $nsg = New-AzNetworkSecurityGroup -Name "Uzima-NSG" `
+          -ResourceGroupName "CDIOUZIMA" `
+          -Location "northeurope"
+      
+      # Add NSG to subnet
+      Set-AzVirtualNetworkSubnetConfig -Name $subnet.Name `
+          -VirtualNetwork $vnet `
+          -NetworkSecurityGroup $nsg `
+          -AddressPrefix $subnet.AddressPrefix | Set-AzVirtualNetwork
+  }
+  
+  # 3. Add basic rules (customize as needed)
+  $rule1 = @{
+      Name                     = 'AllowRDP'
+      Description              = 'Allow RDP'
+      Protocol                 = 'Tcp'
+      SourcePortRange          = '*'
+      DestinationPortRange     = '3389'
+      SourceAddressPrefix      = 'Internet'
+      DestinationAddressPrefix = 'VirtualNetwork'
+      Access                   = 'Allow'
+      Priority                 = 100
+      Direction                = 'Inbound'
+  }
+  
+  $rule2 = @{
+      Name                     = 'AllowHTTP'
+      Description              = 'Allow HTTP'
+      Protocol                 = 'Tcp'
+      SourcePortRange          = '*'
+      DestinationPortRange     = '80'
+      SourceAddressPrefix      = 'Internet'
+      DestinationAddressPrefix = 'VirtualNetwork'
+      Access                   = 'Allow'
+      Priority                 = 110
+      Direction                = 'Inbound'
+  }
+  
+  $nsg | Add-AzNetworkSecurityRuleConfig @rule1 | Set-AzNetworkSecurityGroup
+  $nsg | Add-AzNetworkSecurityRuleConfig @rule2 | Set-AzNetworkSecurityGroup
+  
+  # 4. Stop the Azure Firewall (saves costs while keeping configuration)
+  Stop-AzFirewall -Name "CDIOUZIMA-Firewall" -ResourceGroupName "CDIOUZIMA" -Force
+  
+  # 5. Enable monitoring
+  $workspace = Get-AzOperationalInsightsWorkspace -ResourceGroupName CDIOUZIMA
+  $storageAccount = Get-AzStorageAccount -ResourceGroupName CDIOUZIMA -Name uzimalogs
+  
+  Set-AzNetworkWatcherConfigFlowLog `
+    -NetworkWatcherName "NetworkWatcher_northeurope" `
+    -ResourceGroupName "NetworkWatcherRG" `
+    -TargetResourceId $nsg.Id `
+    -StorageAccountId $storageAccount.Id `
+    -EnableFlowLog $true `
+    -FormatType "JSON" `
+    -FormatVersion 2 `
+    -EnableTrafficAnalytics `
+    -WorkspaceResourceId $workspace.ResourceId `
+    -WorkspaceGUID $workspace.CustomerId
+  ```
+
+- **Rollback Plan**:
+  ```powershell
+  # 1. Remove NSG from subnets (if needed)
+  $vnet = Get-AzVirtualNetwork -Name "CDIOUZIMA" -ResourceGroupName "CDIOUZIMA"
+  $subnet = $vnet.Subnets | Where-Object { $_.NetworkSecurityGroup.Id -like "*Uzima-NSG" }
+  $subnet.NetworkSecurityGroup = $null
+  $vnet | Set-AzVirtualNetwork
+  
+  # 2. Restart the Azure Firewall
+  Start-AzFirewall -Name "CDIOUZIMA-Firewall" -ResourceGroupName "CDIOUZIMA"
+  
+  # 3. Verify firewall status
+  Get-AzFirewall -Name "CDIOUZIMA-Firewall" -ResourceGroupName "CDIOUZIMA" | 
+    Select-Object Name, ProvisioningState, @{Name='IPAddress';Expression={$_.IpConfigurations.PrivateIPAddress}}
+  ```
+
+- **Verification Steps**:
+  1. Check NSG flow logs in Azure Monitor
+  2. Test network connectivity to critical resources
+  3. Monitor for any security alerts in Microsoft Defender for Cloud
+  4. Verify cost savings in Azure Cost Management
+
+- **Important Notes**:
+  - The firewall can be restarted at any time if needed
+  - All configurations are preserved when stopped
+  - No data loss occurs during stop/start operations
 
 #### 3.1.4 Storage Optimization (Save $300.00)
 - **Current**:
