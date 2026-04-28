@@ -5,178 +5,121 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Uzima VM Control Portal</title>
 
-<!-- Fonts & Icons -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
 
 <style>
-:root{
-  --navy:#0a2647; --navy-600:#174ea6;
-  --teal:#0f766e; --blue:#2563eb; --amber:#d97706;
-  --gray-900:#0f172a; --gray-700:#334155; --gray-500:#64748b;
-  --surface:#ffffff; --surface-2:#f8fafc; --ring: rgba(37,99,235,.25);
-  --accent-shadow: rgba(2,6,23,.28);
-}
+:root{--navy:#0a2647;--navy-600:#174ea6;--teal:#0f766e;--blue:#2563eb;--amber:#d97706;--gray-900:#0f172a;--gray-700:#334155;--surface:#fff;--surface-2:#f8fafc;--ring:rgba(37,99,235,.25);--accent-shadow:rgba(2,6,23,.28)}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
-body{
-  font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,Ubuntu,sans-serif;
-  color:var(--gray-900);
-  background:linear-gradient(180deg,#ffffff 0%,#eef7ff 100%);
-  display:flex;flex-direction:column;
-}
-
-/* Header (fixed) */
-header{
-  position:sticky; top:0; z-index:30;
-  background:linear-gradient(135deg,var(--navy) 0%, var(--navy-600) 100%);
-  color:#fff; box-shadow:0 8px 24px rgba(0,0,0,.18);
-}
-.header-inner{
-  max-width:1100px; margin:0 auto; padding:10px 20px;
-  display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:12px;
-}
-.header-left{display:flex;align-items:center;gap:10px}
+body{font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,Ubuntu,sans-serif;color:var(--gray-900);background:linear-gradient(180deg,#fff 0%,#eef7ff 100%);display:flex;flex-direction:column}
+/* Header */
+header{position:sticky;top:0;z-index:30;background:linear-gradient(135deg,var(--navy) 0%,var(--navy-600) 100%);color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+.header-inner{max-width:1100px;margin:0 auto;padding:10px 20px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px}
 .header-left img{height:44px}
-.header-center{display:flex;flex-direction:column;align-items:center;line-height:1.25;text-align:center}
-.header-title{font:700 1.15rem/1.2 'Poppins',sans-serif; letter-spacing:.2px}
-.header-sub{font-size:.9rem; opacity:.9}
+.header-center{display:flex;flex-direction:column;align-items:center}
+.header-title{font:700 1.15rem/1.2 'Poppins',sans-serif}
+.header-sub{font-size:.9rem;opacity:.9}
 .header-right{position:relative;display:flex;align-items:center;gap:12px}
-.avatar{
-  width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
-  font-weight:800;background:#1f3b7a;color:#fff;border:1px solid rgba(255,255,255,.35);cursor:pointer;
-}
-.menu{
-  position:absolute; right:0; top:54px; min-width:200px; background:#fff; color:#0f172a;
-  border:1px solid rgba(0,0,0,.08); border-radius:12px; box-shadow:0 18px 40px -12px rgba(10,15,45,.35);
-  display:none; overflow:hidden; z-index:40;
-}
+.avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:800;background:#1f3b7a;color:#fff;border:1px solid rgba(255,255,255,.35);cursor:pointer}
+.menu{position:absolute;right:0;top:54px;min-width:200px;background:#fff;color:#0f172a;border:1px solid rgba(0,0,0,.08);border-radius:12px;box-shadow:0 18px 40px -12px rgba(10,15,45,.35);display:none;overflow:hidden;z-index:40}
 .menu.show{display:block}
-.menu .mi{
-  display:flex; gap:10px; align-items:center; padding:10px 12px; cursor:pointer; font-weight:700;
-}
+.menu .mi{display:flex;gap:10px;align-items:center;padding:10px 12px;cursor:pointer;font-weight:700}
+.menu .mi i{font-size:.9rem}
 .menu .mi:hover{background:#f6faff}
-.menu .muted{padding:8px 12px; font-size:.85rem; color:#475569}
-
-/* Main */
-main{flex:1; display:flex; justify-content:center; padding:26px 14px}
-.container{width:100%; max-width:980px}
-.card{
-  background:var(--surface); border:1px solid rgba(0,0,0,.06); border-radius:16px;
-  box-shadow:0 28px 60px -26px rgba(10,15,45,.2); overflow:hidden;
-}
-
-/* Accordions */
+.menu .muted{padding:8px 12px;font-size:.85rem;color:#475569}
+/* Gate */
+#gate{width:100%;min-height:calc(100vh - 88px);display:grid;place-items:center;padding:24px 16px}
+.gate-card{width:min(1100px,96vw);background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:18px;overflow:hidden;box-shadow:0 28px 60px -26px rgba(10,15,45,.2);display:grid;grid-template-columns:1.2fr 1fr}
+.gate-media{position:relative;min-height:480px;background:linear-gradient(0deg,rgba(10,38,71,.45),rgba(10,38,71,.45)),url('https://images.unsplash.com/photo-1551281044-8b17c4df7d05?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat}
+.gate-media .brand{position:absolute;top:16px;left:16px;display:flex;gap:10px;align-items:center;color:#fff;font-weight:800}
+.gate-media .brand img{height:38px}
+.gate-media .headline{position:absolute;left:24px;bottom:24px;right:24px;color:#fff}
+.gate-media .headline h1{font-family:'Poppins',sans-serif;font-size:clamp(1.6rem,2.6vw,2.2rem);line-height:1.15;margin-bottom:8px}
+.gate-media .headline p{margin-top:0}
+.gate-side{padding:22px;display:flex;flex-direction:column;gap:14px;justify-content:center;background:linear-gradient(180deg,#fff 0%,#f7fbff 100%)}
+.gate-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.gbtn{flex:1 1 160px;display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.8rem 1rem;border:none;border-radius:12px;cursor:pointer;color:#fff;font-weight:800;background:var(--blue)}
+.gbtn.alt{background:#fbbf24;color:#0b122f}
+.gbtn i{font-size:.9rem}
+.gfoot{font-size:.85rem;color:#475569}
+/* App */
+main.app-wrap{flex:1;display:flex;justify-content:center;padding:26px 14px}
+.container{width:100%;max-width:980px}
+.card{background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:16px;box-shadow:0 28px 60px -26px rgba(10,15,45,.2);overflow:hidden}
 .accordion{width:100%}
 .acc-item + .acc-item{border-top:1px solid rgba(0,0,0,.06)}
-.acc-header{
-  display:flex;align-items:center;justify-content:space-between;gap:10px;
-  padding:14px 16px; cursor:pointer; user-select:none;
-  background:linear-gradient(180deg,#ffffff 0%, #fbfdff 100%);
-}
+.acc-header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;cursor:pointer;background:linear-gradient(180deg,#fff 0%,#fbfdff 100%)}
 .acc-header:hover{background:#f6faff}
-.acc-title{display:flex; align-items:center; gap:.6rem; font:700 1rem/1.2 'Poppins',sans-serif; color:var(--navy)}
+.acc-title{display:flex;align-items:center;gap:.6rem;font:700 1rem/1.2 'Poppins',sans-serif;color:var(--navy)}
 .acc-title i{color:var(--blue)}
-.acc-chevron{transition:transform .2s ease; color:#334155}
+.acc-chevron{transition:transform .2s ease;color:#334155}
 .acc-item.open .acc-chevron{transform:rotate(90deg)}
-.acc-panel{padding:16px; display:none; background:linear-gradient(180deg,#ffffff 0%,#ffffff 60%,#f7fbff 100%)}
-.acc-item.open .acc-panel{display:block; animation:slide .2s ease}
-@keyframes slide{from{opacity:0; transform:translateY(-6px)} to{opacity:1; transform:translateY(0)}}
-
+.acc-panel{padding:16px;display:none;background:linear-gradient(180deg,#fff 0%,#fff 60%,#f7fbff 100%)}
+.acc-item.open .acc-panel{display:block;animation:slide .2s ease}
+@keyframes slide{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
 /* Status + Controls */
-.status{
-  display:flex; align-items:center; gap:.6rem; min-height:48px;
-  padding:12px; border-radius:12px; background:var(--surface-2);
-  border:1px solid rgba(0,0,0,.06); box-shadow:0 1px 0 rgba(0,0,0,.03) inset;
-}
-.status.ok      {border-left:6px solid var(--teal); background:linear-gradient(90deg,#f0fdfa 0%,#f8ffff 100%); color:var(--teal)}
-.status.stopped {border-left:6px solid var(--amber); background:linear-gradient(90deg,#fff7ed 0%,#fff 100%); color:#92400e}
-.spinner{width:18px;height:18px;border:3px solid #cbd5e1;border-top:3px solid var(--blue);border-radius:50%;animation:spin 1s linear infinite}
+.status-wrap{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.btn-status{padding:.55rem .8rem;border:none;border-radius:10px;background:#e6efff;color:#174ea6;font-weight:700;cursor:pointer}
+.btn-status:hover{background:#d9e6ff}
+.status{display:flex;align-items:center;gap:.6rem;min-height:48px;padding:12px;border-radius:12px;background:var(--surface-2);border:1px solid rgba(0,0,0,.06);box-shadow:0 1px 0 rgba(0,0,0,.03) inset;width:min(100%,680px)}
+.status.ok{border-left:6px solid var(--teal);background:linear-gradient(90deg,#f0fdfa 0%,#f8ffff 100%);color:var(--teal)}
+.status.stopped{border-left:6px solid var(--amber);background:linear-gradient(90deg,#fff7ed 0%,#fff 100%);color:#92400e}
+.spinner{width:18px;height:18px;border:3px solid #cbd5e1;border-top:3px solid #2563eb;border-radius:50%;animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.count{font-weight:700;margin-left:.25rem}
-.controls{display:flex; gap:12px; flex-wrap:wrap; margin-top:12px}
-.btn{
-  flex:1 1 180px; display:flex; align-items:center; justify-content:center; gap:.55rem;
-  padding:.9rem 1rem; border:none; border-radius:12px; color:#fff; font-weight:700; font-size:1rem; cursor:pointer;
-  transition:transform .15s ease, box-shadow .15s ease; outline:0;
-}
-.btn:focus{box-shadow:0 0 0 4px var(--ring)}
-.btn.primary{background:var(--blue)}
-.btn.warn{background:var(--amber)}
-.btn:disabled{opacity:.6; cursor:not-allowed}
-.btn:hover:not(:disabled){transform:translateY(-1px); box-shadow:0 14px 30px -14px var(--accent-shadow)}
-
+.controls{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+.btn{flex:1 1 180px;display:flex;align-items:center;justify-content:center;gap:.55rem;padding:.9rem 1rem;border:none;border-radius:12px;color:#fff;font-weight:700;font-size:1rem;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease}
+.btn.primary{background:#2563eb}
+.btn.warn{background:#d97706}
+.btn:disabled{opacity:.6;cursor:not-allowed}
+.btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 14px 30px -14px var(--accent-shadow)}
+.jit-row{display:flex;gap:10px;margin-top:8px}
+.btn-jit{padding:.55rem .9rem;font-size:.92rem;border-radius:10px;background:#fde68a;color:#7c3e00;border:none;font-weight:800;cursor:pointer}
+.btn-jit:disabled{opacity:.6;cursor:not-allowed}
 /* Logs */
-.loglist{
-  max-height:220px; overflow:auto; display:flex; flex-direction:column; gap:6px; padding:10px;
-  background:#ffffff; border:1px solid rgba(0,0,0,.06); border-radius:12px;
-}
-.logitem{
-  font-size:.85rem; color:#111827; line-height:1.35;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-}
-.userline{margin-top:10px; font-size:.9rem; color:var(--gray-700); display:flex; gap:10px; align-items:center}
-
-/* Admin table */
-.table{width:100%; border-collapse:separate; border-spacing:0 8px}
-.row{
-  background:#fbfdff; border:1px solid rgba(0,0,0,.06); border-radius:10px; padding:10px;
-  display:grid; grid-template-columns:1.2fr .6fr .7fr .7fr; gap:10px; align-items:center;
-}
-.row .role select{width:100%; padding:.45rem; border:1px solid rgba(0,0,0,.12); border-radius:8px; background:#fff}
-.row .actions button{padding:.45rem .6rem; border:none; border-radius:8px; font-weight:700; cursor:pointer; color:#fff}
-.btn-approve{background:var(--teal)}
-.btn-reject{background:var(--amber)}
+.loglist{max-height:220px;overflow:auto;display:flex;flex-direction:column;gap:6px;padding:10px;background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:12px}
+.logitem{font-size:.85rem;color:#111827;line-height:1.35;font-family:ui-monospace,Menlo,Consolas,monospace}
+.userline{margin-top:10px;font-size:.9rem;color:#334155;display:flex;gap:10px;align-items:center}
+/* Admin quick view */
+.table{width:100%;border-collapse:separate;border-spacing:0 8px}
+.row{background:#fbfdff;border:1px solid rgba(0,0,0,.06);border-radius:10px;padding:10px;display:grid;grid-template-columns:1.2fr .6fr .7fr .7fr;gap:10px;align-items:center}
 .badge-status{display:inline-block;padding:.2rem .5rem;border-radius:999px;font-size:.75rem;font-weight:700}
 .badge-pending{background:#fef3c7;color:#92400e}
 .badge-approved{background:#ccfbf1;color:#065f46}
-
-/* Modals */
-.modal{position:fixed; inset:0; background:rgba(10,38,71,.45); display:none; align-items:center; justify-content:center; padding:18px; z-index:40}
+.badge-superseded{background:#e2e8f0;color:#334155}
+.btn-sm{padding: .4rem .6rem; font-size:.85rem; border-radius:8px;}
+/* Modal */
+.modal{position:fixed;inset:0;background:rgba(10,38,71,.45);display:none;align-items:center;justify-content:center;padding:18px;z-index:40}
 .modal.show{display:flex}
-.modal-card{width:100%; max-width:460px; background:#fff; border-radius:16px; box-shadow:0 24px 60px -20px rgba(0,0,0,.35); overflow:hidden}
-.modal-head{background:linear-gradient(135deg,#1f3b7a,#2563eb); color:#fff; padding:14px 16px; font-weight:700; display:flex; justify-content:space-between; align-items:center}
+.modal-card{width:100%;max-width:460px;background:#fff;border-radius:16px;box-shadow:0 24px 60px -20px rgba(0,0,0,.35);overflow:hidden}
+.modal-head{background:linear-gradient(135deg,#1f3b7a,#2563eb);color:#fff;padding:14px 16px;font-weight:700;display:flex;justify-content:space-between;align-items:center}
 .modal-body{padding:16px}
-.form{display:grid; gap:10px}
-.form label{font-size:.9rem; color:var(--gray-700)}
-.form input, .form select, .form textarea{width:100%; padding:.65rem .7rem; border:1px solid rgba(0,0,0,.12); border-radius:10px; background:#fff}
-.form input:focus, .form select:focus, .form textarea:focus{outline:none; box-shadow:0 0 0 4px var(--ring)}
-.modal-actions{display:flex; gap:10px; margin-top:12px}
-.btn-dark{background:#0b122f; color:#fff; border:none; padding:.7rem 1rem; border-radius:10px; font-weight:700; cursor:pointer}
-.btn-ghost{background:#e2e8f0; color:#0b122f; border:none; padding:.7rem 1rem; border-radius:10px; font-weight:700; cursor:pointer}
-
+.form{display:grid;gap:10px}
+.form label{font-size:.9rem;color:#334155}
+.form input, .form select{width:100%;padding:.65rem .7rem;border:1px solid rgba(0,0,0,.12);border-radius:10px;background:#fff}
+.form input:focus, .form select:focus{outline:none;box-shadow:0 0 0 4px var(--ring)}
+.modal-actions{display:flex;gap:10px;margin-top:12px;justify-content:flex-start} 
+.btn-dark{background:#0b122f;color:#fff;border:none;padding:.7rem 1rem;border-radius:10px;font-weight:700;cursor:pointer}
+.btn-ghost{background:#e2e8f0;color:#0b122f;border:none;padding:.7rem 1rem;border-radius:10px;font-weight:700;cursor:pointer}
 /* Footer */
-footer{
-  background:linear-gradient(135deg,var(--navy) 0%, var(--navy-600) 100%);
-  color:rgba(255,255,255,.92);
-  padding:16px 20px; font-size:.92rem; box-shadow:0 -6px 18px rgba(0,0,0,.12);
-}
-.footer-inner{
-  max-width:1100px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
-}
-.links{display:flex; gap:16px; flex-wrap:wrap}
-.links a{color:rgba(255,255,255,.9); text-decoration:none; font-weight:700}
-.links a:hover{color:#fff; text-decoration:underline}
-
-@media (max-width:740px){
-  .row{grid-template-columns:1fr 1fr; grid-auto-rows:auto}
-  .header-center{display:none;}
-}
+footer{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-600) 100%);color:rgba(255,255,255,.92);padding:16px 20px;font-size:.92rem;box-shadow:0 -6px 18px rgba(0,0,0,.12)}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.links{display:flex;gap:16px;flex-wrap:wrap}
+.links a{color:rgba(255,255,255,.9);text-decoration:none;font-weight:700}
+.links a:hover{color:#fff;text-decoration:underline}
+/* Responsive */
+@media (max-width:900px){.gate-card{grid-template-columns:1fr}.gate-media{min-height:320px}}
 </style>
 </head>
 <body>
-
-<!-- HEADER -->
 <header role="banner" aria-label="Uzima VM Header">
   <div class="header-inner">
-    <div class="header-left">
-      <img src="Uzima_logo.png" alt="Uzima Data Science logo">
-    </div>
+    <div class="header-left"><img src="Uzima_logo.png" alt="Uzima Data Science logo"></div>
     <div class="header-center">
       <div class="header-title">Uzima VM Control Portal</div>
-      <div class="header-sub">In collaboration with Aga Khan University Hospital</div>
+      <div class="header-sub">Aga Khan University CDIO Team</div>
     </div>
     <div class="header-right">
       <div id="avatar" class="avatar" title="Open menu" aria-haspopup="menu">U</div>
@@ -191,84 +134,81 @@ footer{
   </div>
 </header>
 
-<!-- MAIN -->
-<main>
+<main id="gate">
+  <section class="gate-card" aria-label="Welcome">
+    <div class="gate-media">
+      <div class="brand"><img src="Uzima_logo.png" alt="Uzima"><span>Uzima · CDIO</span></div>
+      <div class="headline"><h1>UZIMA-CDIO Portal for Managing VM Usage and Troubleshooting Issues</h1><p>Start/Stop · Status · JIT Access</p></div>
+    </div>
+    <div class="gate-side">
+      <h2>Welcome</h2>
+      <div class="gate-actions">
+        <button id="gateSignIn" class="gbtn"><i class="fa-solid fa-right-to-bracket"></i> Sign in</button>
+        <button id="gateSignUp" class="gbtn alt"><i class="fa-solid fa-user-plus"></i> Sign up</button>
+      </div>
+      <div class="gfoot">Use your VM username and password</div>
+    </div>
+  </section>
+</main>
+
+<main id="app" class="app-wrap" style="display:none">
   <div class="container">
-    <section class="card" aria-label="Uzima control card">
-      <div class="accordion" id="accordion">
-        <!-- VM STATUS -->
-        <div class="acc-item open" id="sec-status">
-          <div class="acc-header" data-acc="status" role="button" tabindex="0" aria-expanded="true">
-            <div class="acc-title"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i> VM Status</div>
-            <i class="fa-solid fa-chevron-right acc-chevron" aria-hidden="true"></i>
+    <section class="card">
+      <div class="accordion">
+        <div class="acc-item open">
+          <div class="acc-header" role="button" tabindex="0" aria-expanded="true">
+            <div class="acc-title"><i class="fa-solid fa-gauge-high"></i> VM Status</div>
+            <i class="fa-solid fa-chevron-right acc-chevron"></i>
           </div>
           <div class="acc-panel" aria-live="polite">
-            <div id="statusBox" class="status stopped" role="status">
-              <div id="statusSpinner" class="spinner" style="display:none" aria-hidden="true"></div>
-              <span id="statusText">VM is stopped</span><span id="count" class="count"></span>
+            <div class="status-wrap">
+              <button id="btnCheck" class="btn-status"><i class="fa-solid fa-rotate-right"></i> Check Status</button>
+              <div id="statusBox" class="status stopped">
+                <div id="statusSpinner" class="spinner" style="display:none"></div>
+                <span id="statusText">VM status: (unknown)</span><span id="count" class="count"></span>
+              </div>
             </div>
-            <div class="controls" role="group" aria-label="VM controls">
-              <button id="btnStart" class="btn primary" aria-label="Start VM"><i class="fa-solid fa-power-off"></i> Start VM</button>
-              <button id="btnStop"  class="btn warn"    aria-label="Stop VM"><i class="fa-solid fa-stop"></i> Stop VM</button>
+            <div class="controls">
+              <button id="btnStart" class="btn primary"><i class="fa-solid fa-power-off"></i> Start VM</button>
+              <button id="btnStop" class="btn warn"><i class="fa-solid fa-stop"></i> Stop VM</button>
+            </div>
+            <div class="jit-row">
+              <button id="btnAccessTroubleshoot" class="btn-jit" disabled><i class="fa-solid fa-screwdriver-wrench"></i> Access Troubleshoot</button>
             </div>
           </div>
         </div>
 
-        <!-- LOGS -->
-        <div class="acc-item" id="sec-logs">
-          <div class="acc-header" data-acc="logs" role="button" tabindex="0" aria-expanded="false">
-            <div class="acc-title"><i class="fa-regular fa-rectangle-list" aria-hidden="true"></i> Activity Log</div>
-            <i class="fa-solid fa-chevron-right acc-chevron" aria-hidden="true"></i>
+        <div class="acc-item">
+          <div class="acc-header" role="button" tabindex="0" aria-expanded="false">
+            <div class="acc-title"><i class="fa-regular fa-rectangle-list"></i> Activity Log</div>
+            <i class="fa-solid fa-chevron-right acc-chevron"></i>
           </div>
           <div class="acc-panel">
-            <div id="loglist" class="loglist" aria-label="Last 30 actions"></div>
+            <div id="loglist" class="loglist"></div>
             <div class="userline">
               <span id="userLineText">Not signed in</span>
               <span id="userLineSep" style="opacity:.6;display:none">|</span>
               <a href="#" id="userLogout" style="display:none">Log out</a>
             </div>
+            <pre id="rawLog" style="margin-top:8px;font-size:.8rem;color:#374151;background:#f9fafb;border:1px solid #e5e7eb;padding:8px;border-radius:8px;max-height:160px;overflow:auto;"></pre>
           </div>
         </div>
 
-        <!-- USER MGMT -->
-        <div class="acc-item" id="sec-admin">
-          <div class="acc-header" data-acc="admin" role="button" tabindex="0" aria-expanded="false">
-            <div class="acc-title"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> User Management (Admins)</div>
-            <i class="fa-solid fa-chevron-right acc-chevron" aria-hidden="true"></i>
+        <div class="acc-item" id="sec-admin" style="display:none;">
+          <div class="acc-header" role="button" tabindex="0" aria-expanded="false">
+            <div class="acc-title"><i class="fa-solid fa-shield-halved"></i> User Management (Admins)</div>
+            <i class="fa-solid fa-chevron-right acc-chevron"></i>
           </div>
-          <div class="acc-panel">
-            <p class="subtitle">Approve new users, handle requests, and assign roles.</p>
-            <div id="userTable"></div>
-          </div>
-        </div>
-
-        <!-- ABOUT -->
-        <div class="acc-item" id="sec-about">
-          <div class="acc-header" data-acc="about" role="button" tabindex="0" aria-expanded="false">
-            <div class="acc-title"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> About Uzima VM Portal</div>
-            <i class="fa-solid fa-chevron-right acc-chevron" aria-hidden="true"></i>
-          </div>
-          <div class="acc-panel">
-            <p style="color:var(--gray-700);margin-bottom:8px">
-              The Uzima VM Control Portal provides a secure, role-based interface for managing research and data workloads in the Uzima Data Science Lab, in collaboration with Aga Khan University Hospital.
-              VM lifecycle actions are coordinated to optimize resources and maintain stability.
-            </p>
-            <p style="color:var(--gray-700);margin-bottom:8px">
-              For assistance or access requests, contact the CDIO team:
-              <a href="mailto:rais.muhammad@aku.edu?subject=Uzima%20VM%20Support">rais.muhammad@aku.edu</a>,
-              <a href="mailto:derick.imbati@aku.edu?subject=Uzima%20VM%20Support">derick.imbati@aku.edu</a>.
-            </p>
-          </div>
+          <div class="acc-panel"><div id="userTable"></div></div>
         </div>
       </div>
     </section>
   </div>
 </main>
 
-<!-- FOOTER -->
 <footer role="contentinfo">
   <div class="footer-inner">
-    <div>&copy; <span id="year"></span> Uzima Data Science · Aga Khan University Hospital</div>
+    <div>&copy; <span id="year"></span> Uzima Data Science · Aga Khan University CDIO Team</div>
     <nav class="links" aria-label="Footer links">
       <a href="https://uzimadatascience.org/about/hub-overview/" target="_blank" rel="noopener">Uzima</a>
       <a href="mailto:rais.muhammad@aku.edu,derick.imbati@aku.edu?subject=Uzima%20VM%20Support">Contact</a>
@@ -278,7 +218,6 @@ footer{
   </div>
 </footer>
 
-<!-- AUTH MODAL -->
 <div id="authModal" class="modal" aria-hidden="true">
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="authTitle">
     <div class="modal-head">
@@ -286,766 +225,1109 @@ footer{
       <a href="#" id="authClose" class="btn-ghost" aria-label="Close">Close</a>
     </div>
     <div class="modal-body">
-      <div class="form">
-        <label id="nameLabel" style="display:none">Full name</label>
-        <input id="nameInput" placeholder="Jane Doe" style="display:none" autocomplete="name">
-        <label>Email</label>
-        <input id="emailInput" placeholder="you@aku.edu" type="email" autocomplete="username">
-        <label>Password <span class="muted" id="pwHint"></span></label>
-        <input id="passInput" placeholder="••••••••" type="password" autocomplete="current-password">
+      <form id="authForm" class="form">
+        <label for="usernameInput">Username</label>
+        <input type="text" id="usernameInput" placeholder="Enter your username" required>
+        <label for="passInput">Password</label>
+        <input type="password" id="passInput" placeholder="Enter your password" required>
         <div class="muted" id="authHint"></div>
-      </div>
-      <div class="modal-actions">
-        <button id="authPrimary" class="btn-dark">Continue</button>
-        <button id="authSwap" class="btn-ghost">Need an account?</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- PROFILE MODAL -->
-<div id="profileModal" class="modal" aria-hidden="true">
-  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="profileTitle">
-    <div class="modal-head">
-      <span id="profileTitle">Profile</span>
-      <a href="#" id="profileClose" class="btn-ghost" aria-label="Close profile">Close</a>
-    </div>
-    <div class="modal-body">
-      <div class="form">
-        <label>Full name</label>
-        <input id="pName" placeholder="Your name" autocomplete="name">
-        <label>Email (read-only)</label>
-        <input id="pEmail" disabled>
-        <label>Change password (optional)</label>
-        <input id="pPass" type="password" placeholder="New password (min 8 chars)">
-        <label>Request higher access</label>
-        <select id="pRequest">
-          <option value="">-- Select a role to request --</option>
-          <option value="contributor">Contributor</option>
-          <option value="admin">Admin</option>
-        </select>
-        <label>Message to admins (optional)</label>
-        <textarea id="pMsg" rows="3" placeholder="Add context for your request"></textarea>
-      </div>
-      <div class="modal-actions">
-        <button id="btnSaveProfile" class="btn-dark">Save</button>
-        <button id="btnRequestRole" class="btn-ghost">Send request</button>
-      </div>
+        <div class="modal-actions">
+          <button type="submit" id="authPrimary" class="btn-dark">Sign In</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
 
 <script>
-/* ================== AZURE BLOB CONFIG ================== */
-const ACCOUNT_URL = "https://uzimavmcontrol.blob.core.windows.net";
-const CONTAINER   = "uzima-vm-control-data";
-const SAS_QUERY = "sv=2024-11-04&ss=bfqt&srt=sco&sp=rwdlacupitfx&se=2028-10-14T15:22:11Z&st=2025-10-14T07:07:11Z&spr=https,http&sig=bBPplen07eOg17ErlNM6Ml4%2BWyDgPIf9p3AQUyVKShI%3D";
-const BLOB = { USERS:"users.json", LOGS:"logs.json", STATE:"state.json", REQUESTS:"requests.json" };
+/* ================== CONFIG & DATA (Simplified Client-Side Store) ================== */
 
-// Retry configuration
-const MAX_RETRIES = 3;
-const RETRY_DELAY = 1000; // 1 second initial delay
+// Static User Data from users.json for client-side authentication
+// CORRECTED: Restored full email addresses for Derick, Rais, Allan, Amos, and Farhana to ensure they are found by their full username.
+const USERS_DATA = [
+  {"name": "Admin", "user_name": "admindsvm", "password": "vm@superNairobi#CD1O", "role": "Viewer", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "Allan", "user_name": "allan.zablon@aku.edu", "password": "allan123", "role": "Admin", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "Amos", "user_name": "amos.bunde@aku.edu", "password": "amos123", "role": "Admin", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "Andrew", "user_name": "andrew.aballa", "password": "2229aku!@d", "role": "Contributor", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "Awaljee", "user_name": "awaljee", "password": "", "role": "Contributor", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "Daisy", "user_name": "Daisy_PhD", "password": "WdG*2+m10w4W", "role": "Contributor", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "Danie", "user_name": "daniel.forger", "password": "[5J~]8T7~BFt", "role": "Contributor", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "Danyal", "user_name": "Danyal", "password": "x2z(Cn75|6rZ", "role": "Contributor", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "David", "user_name": "david.andai", "password": "6uER93Zy/&iS", "role": "Contributor", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "Derick", "user_name": "derick.imbati@aku.edu", "password": "derick123", "role": "Admin", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "Dorcas", "user_name": "dorcas.mwigereri", "password": "9&q@IHD7o47q", "role": "Contributor", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "Evan", "user_name": "Evan", "password": "6X#sqk?16s!g", "role": "Contributor", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "Faith", "user_name": "faith.neema", "password": "4+V5\r3jC1RK", "role": "Contributor", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "Guest", "user_name": "guest", "password": "guest123", "role": "Contributor", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "James", "user_name": "james.orwa", "password": "6Hp2ZD{4YEpk", "role": "Contributor", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "Joan", "user_name": "Joan", "password": "O@wO7gn9$4+n", "role": "Contributor", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "Kevin", "user_name": "Kevin_umich", "password": "b4KDGs5b0}@^", "role": "Contributor", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "Linda", "user_name": "linda.khakali", "password": "1!5F!9#J0Bv<", "role": "Contributor", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "Marcel", "user_name": "Marcel", "password": "34u29dkfd!@d", "role": "Contributor", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "Marthaclaire", "user_name": "marthaclaire.zammit", "password": "n{wKM454)6\\Z", "role": "Contributor", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "Minke", "user_name": "Minke_Lee", "password": "9&4262HxT>tz", "role": "Contributor", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "Moses", "user_name": "moses.mukhanya", "password": "14u91Xkd~]nA", "role": "Contributor", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "Nannab", "user_name": "nannab", "password": "69!gP#J1J0cT", "role": "Contributor", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "Omondi", "user_name": "omondi.owiti", "password": ">hk'51J7gdTt", "role": "Contributor", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "Princ", "user_name": "principle", "password": "qZF8W32o)Dtj", "role": "Contributor", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "Priss", "user_name": "prissy.makena", "password": "3DkHe#44Su47", "role": "Contributor", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "Rais", "user_name": "rais.muhammad@aku.edu", "password": "rais123", "role": "Admin", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "Farhana", "user_name": "farhana.alarakhiya@aku.edu", "password": "pass@123", "role": "Admin", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "Victor", "user_name": "Victor", "password": "iUG.dz_9710n", "role": "Contributor", "last_updated": "2025-10-22T00:00:00", "approved": true, "status": "Active", "approved_by": "System"},
+  {"name": "Guest", "user_name": "guest@aku.edu", "password": "guest123#111", "role": "Contributor", "last_updated": "2025-10-20T00:00:00", "approved": true, "status": "Inactive", "approved_by": "System"}
+];
 
-/* ================== VM CONFIG ================== */
+// AZURE CONFIG - (Same as before, preserved)
+const STATUS_FUNCTION_URL = 'https://get-uzima-vm-status-h0bha2aza3hmbga0.westeurope-01.azurewebsites.net/'; 
 const START_WEBHOOK_URL = "https://c1b86629-139b-420c-83ac-ee0d882dfe70.webhook.ne.azure-automation.net/webhooks?token=XJnARFlkbW%2fbxeBAToejKDsE%2beqs2NnGbgOmlJVwOQ4%3d";
 const STOP_WEBHOOK_URL = "https://c1b86629-139b-420c-83ac-ee0d882dfe70.webhook.ne.azure-automation.net/webhooks?token=ewb5VijdGH1x2OACTGkQBzqOIOm%2fa8EaRHug6vogKAk%3d";
-// Increased timeouts to handle potential Azure Automation delays
-const TRANSITION_MS = 5*60*1000;      // 5 minutes for VM operations
-const FRESH_WINDOW  = 45*60*1000;     // 45 minutes for status freshness
-const MAX_LOGS      = 30;
+const JIT_WEBHOOK_URL = 'https://c1b86629-139b-420c-83ac-ee0d882dfe70.webhook.ne.azure-automation.net/webhooks?token=7RaLtMoN3fIZPrrbNELI02QVvl9t%2bYdeWvcU9%2buHcH0%3d'; 
+const AZURE_BLOB_BASE_URL = 'https://uzimavmcontrol.blob.core.windows.net/';
+const LOG_CONTAINER_NAME = 'uzima-vm-control-data';
+const LOG_SAS_TOKEN = '?sv=2024-11-04&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2030-10-21T19:39:11Z&st=2025-10-21T11:24:11Z&spr=https,http&sig=jGOCHQwfwBOB4%2BilivLnAiigdY9iD%2Fj3t6KHgvH3rwM%3D';
 
-/* ================== ELEMENTS ================== */
-document.getElementById('year').textContent = new Date().getFullYear();
 
-const avatar = document.getElementById('avatar');
-const userMenu = document.getElementById('userMenu');
-const menuName = document.getElementById('menuName');
-const miSignIn = document.getElementById('miSignIn');
-const miSignUp = document.getElementById('miSignUp');
-const miProfile = document.getElementById('miProfile');
-const miLogout = document.getElementById('miLogout');
+const ACTION_COOLDOWN_SECONDS = 60; 
+const JIT_COOLDOWN_SECONDS = 3; 
+const MAX_RETRIES = 5; 
+const DEFAULT_AUTH_FORM_HTML = `
+  <label for="usernameInput">Username</label>
+  <input type="text" id="usernameInput" placeholder="Enter your username" required>
+  <label for="passInput">Password</label>
+  <input type="password" id="passInput" placeholder="Enter your password" required>
+  <div class="muted" id="authHint"></div>
+  <div class="modal-actions">
+    <button type="submit" id="authPrimary" class="btn-dark">Sign In</button>
+  </div>
+`;
 
-const loglist = document.getElementById('loglist');
-const userLineText = document.getElementById('userLineText');
-const userLineSep = document.getElementById('userLineSep');
-const userLogoutLink = document.getElementById('userLogout');
 
-const statusBox = document.getElementById('statusBox');
-const statusSpinner = document.getElementById('statusSpinner');
-const statusText = document.getElementById('statusText');
-const countEl = document.getElementById('count');
-const btnStart = document.getElementById('btnStart');
-const btnStop = document.getElementById('btnStop');
+/* ================== STORE/STATE & USER MANAGEMENT ================== */
 
-const userTable = document.getElementById('userTable');
+const store = {
+    state: { // VM state
+        state: 'unknown',
+        raw: '(unknown)',
+        lastCheck: null
+    },
+    logs: [], // Activity Log
+    cooldownEnd: null,
+    cooldownTargetState: null,
+};
 
-/* Auth modal elements */
-const authModal = document.getElementById('authModal');
-const authTitle = document.getElementById('authTitle');
-const authClose = document.getElementById('authClose');
-const nameLabel = document.getElementById('nameLabel');
-const nameInput = document.getElementById('nameInput');
-const emailInput = document.getElementById('emailInput');
-const passInput = document.getElementById('passInput');
-const authHint = document.getElementById('authHint');
-const authPrimary = document.getElementById('authPrimary');
-const authSwap = document.getElementById('authSwap');
-const pwHint = document.getElementById('pwHint');
+let countdownTimer = null;
+let apiLoading = false; 
 
-/* Profile modal elements */
-const profileModal = document.getElementById('profileModal');
-const profileClose = document.getElementById('profileClose');
-const pName = document.getElementById('pName');
-const pEmail = document.getElementById('pEmail');
-const pPass = document.getElementById('pPass');
-const pRequest = document.getElementById('pRequest');
-const pMsg = document.getElementById('pMsg');
+// Global variable to hold all users (static + client-side additions/modifications)
+let ALL_USERS = [];
+const STATIC_USERS_DATA = [...USERS_DATA];
 
-/* ================== SESSION (LOCAL ONLY) ================== */
-const SESSION_KEY = "uzima_session";
-function getSession(){ try{const v=localStorage.getItem(SESSION_KEY); return v?JSON.parse(v):null;}catch{return null;} }
-function setSession(obj){ localStorage.setItem(SESSION_KEY, JSON.stringify(obj)); }
-function clearSession(){ localStorage.removeItem(SESSION_KEY); }
-
-/* ================== AZURE BLOB HELPERS ================== */
-function blobUrl(blob, extra=""){ return `${ACCOUNT_URL}/${CONTAINER}/${blob}?${SAS_QUERY}${extra}`; }
-function containerUrl(){ return `${ACCOUNT_URL}/${CONTAINER}?restype=container&comp=create&${SAS_QUERY}`; }
-
-// Helper function for retry logic with exponential backoff
-async function withRetry(operation, maxRetries = MAX_RETRIES, delay = RETRY_DELAY) {
-  let lastError;
-  
-  for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    try {
-      return await operation();
-    } catch (error) {
-      lastError = error;
-      console.warn(`Attempt ${attempt} failed:`, error);
-      
-      if (attempt < maxRetries) {
-        const waitTime = delay * Math.pow(2, attempt - 1);
-        console.log(`Retrying in ${waitTime}ms...`);
-        await new Promise(resolve => setTimeout(resolve, waitTime));
-      }
-    }
-  }
-  
-  throw lastError || new Error('Operation failed after retries');
+function initializeUsers() {
+    const pendingJson = localStorage.getItem('pendingUsers');
+    const pending = pendingJson ? JSON.parse(pendingJson) : [];
+    
+    // Use a Map to combine and prioritize, ensuring no duplicates by username (case-insensitive)
+    const userMap = new Map();
+    STATIC_USERS_DATA.forEach(user => userMap.set(user.user_name.toLowerCase(), user));
+    pending.forEach(user => userMap.set(user.user_name.toLowerCase(), user));
+    
+    // Filter out users that were superseded by an Admin edit and are now duplicated
+    const finalUsers = Array.from(userMap.values());
+    ALL_USERS = finalUsers.filter(user => user.status !== 'Superseded');
 }
 
-async function ensureContainer(){
-  return withRetry(async () => {
-    const response = await fetch(containerUrl(), { 
-      method: 'PUT',
-      headers: { 'x-ms-version': '2024-11-04' }
-    });
+// Helper to save client-side users to localStorage
+function saveClientUsers() {
+    // Collect users that originated from client-side actions (sign-up) or were modified by an Admin
+    const clientUsers = ALL_USERS.filter(user => 
+        !STATIC_USERS_DATA.some(staticUser => staticUser.user_name.toLowerCase() === user.user_name.toLowerCase()) || 
+        user.status === 'Superseded' || user.approved === false || user.modified === true || user.status === 'Pending' // Keep all modified states
+    );
+
+    // Save only unique records for client-side persistence
+    const uniqueClientUsers = Array.from(new Map(clientUsers.map(user => [user.user_name.toLowerCase(), user])).values());
+    localStorage.setItem('pendingUsers', JSON.stringify(uniqueClientUsers));
     
-    // 201 = Created, 409 = Already exists
-    if (![201, 409].includes(response.status)) {
-      throw new Error(`Container operation failed with status ${response.status}`);
-    }
-    return true;
-  }).catch(error => {
-    console.error('Failed to ensure container exists:', error);
-    return false;
-  });
-}
-async function getJSON(blob) {
-  return withRetry(async () => {
-    const response = await fetch(blobUrl(blob), { 
-      method: 'GET',
-      cache: 'no-store',
-      headers: { 'x-ms-version': '2024-11-04' }
-    });
-    
-    if (response.status === 404) return null;
-    if (!response.ok) {
-      throw new Error(`GET ${blob} failed with status ${response.status}`);
-    }
-    
-    return await response.json();
-  }).catch(error => {
-    console.error(`Failed to get ${blob}:`, error);
-    return null;
-  });
-}
-async function putJSON(blob, data) {
-  return withRetry(async () => {
-    const response = await fetch(blobUrl(blob), {
-      method: 'PUT',
-      headers: { 
-        'x-ms-blob-type': 'BlockBlob',
-        'Content-Type': 'application/json',
-        'x-ms-version': '2024-11-04'
-      },
-      body: JSON.stringify(data)
-    });
-    
-    if (!response.ok) {
-      throw new Error(`PUT ${blob} failed with status ${response.status}`);
-    }
-    
-    return true;
-  }).catch(error => {
-    console.error(`Failed to save ${blob}:`, error);
-    return false;
-  });
+    // Re-initialize to ensure ALL_USERS array is up-to-date
+    initializeUsers(); 
 }
 
-/* ================== IN-MEMORY STORE ================== */
-const store = { users:[], logs:[], state:{state:'stopped', lastChange:0}, requests:[] };
-function nowStr(){ return new Date().toLocaleString(); }
-function initials(s){ const t=(s||'U').trim(); if(!t.includes(' ')) return t.substring(0,2).toUpperCase(); return t.split(' ').map(x=>x[0]).slice(0,2).join('').toUpperCase(); }
+function getUsers() {
+    return ALL_USERS;
+}
 
-/* ===== Reconcile default admins (self-healing) ===== */
-async function reconcileDefaultAdmins() {
-  let changed = false;
-  function upsertAdmin(email, name, defaultPass) {
-    const i = store.users.findIndex(u => (u.email||'').toLowerCase() === email.toLowerCase());
-    if (i === -1) {
-      store.users.push({
-        id: (crypto?.randomUUID?.() || 'u' + Math.random().toString(36).slice(2,10)),
-        name, email, pass: defaultPass, role:'admin', status:'approved', createdAt: Date.now()
-      });
-      changed = true;
+function findUserByUsername(username) {
+    return getUsers().find(u => u.user_name.toLowerCase() === username.toLowerCase());
+}
+
+function setSession(userData) {
+    const sessionData = {
+        id: userData.user_name,
+        username: userData.user_name,
+        name: userData.name,
+        role: userData.role,
+        status: userData.status,
+        approved: userData.approved 
+    };
+    localStorage.setItem('currentUser', JSON.stringify(sessionData));
+}
+
+function currentUser() {
+    const userJson = localStorage.getItem('currentUser');
+    return userJson ? JSON.parse(userJson) : null;
+}
+
+function clearSession() {
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('cooldownEnd');
+    localStorage.removeItem('cooldownTargetState');
+    store.cooldownEnd = null;
+    store.cooldownTargetState = null;
+    clearInterval(countdownTimer);
+    countdownTimer = null;
+}
+
+
+/* ================== AUTH LOGIC ================== */
+
+function openAuth(mode = 'signin') {
+    if (!authModal) return; 
+
+    // Restore the default authentication form content and re-attach handler
+    authForm.innerHTML = DEFAULT_AUTH_FORM_HTML; 
+    authForm.removeEventListener('submit', handleAuthSubmit);
+    authForm.addEventListener('submit', handleAuthSubmit);
+    
+    // Re-assign form elements
+    usernameInput = document.getElementById('usernameInput');
+    passInput = document.getElementById('passInput');
+    authHint = document.getElementById('authHint');
+    authPrimary = document.getElementById('authPrimary');
+    
+    authTitle.textContent = mode === 'signup' ? 'Sign Up' : 'Sign In';
+    authPrimary.textContent = mode === 'signup' ? 'Register' : 'Sign In';
+    authPrimary.dataset.mode = mode;
+    authHint.innerHTML = '';
+    if(usernameInput) usernameInput.value = '';
+    if(passInput) passInput.value = '';
+
+    authModal.classList.add('show');
+    if(usernameInput) usernameInput.focus();
+}
+
+function closeAuth() {
+    if (authModal) {
+        authModal.classList.remove('show');
+        // Reset form content to default sign-in state
+        authForm.innerHTML = DEFAULT_AUTH_FORM_HTML;
+        // Re-assign elements for the next openAuth call
+        reassignAuthElements();
+    }
+}
+
+function reassignAuthElements() {
+    usernameInput = document.getElementById('usernameInput');
+    passInput = document.getElementById('passInput');
+    authHint = document.getElementById('authHint');
+    authPrimary = document.getElementById('authPrimary');
+    authForm.removeEventListener('submit', handleAuthSubmit);
+    authForm.addEventListener('submit', handleAuthSubmit);
+}
+
+function handleAuthSubmit(e) {
+    e.preventDefault();
+    
+    // Re-get elements as they might have been replaced
+    const username = (document.getElementById('usernameInput')?.value || '').trim();
+    const password = (document.getElementById('passInput')?.value || '').trim();
+    const primaryButton = document.getElementById('authPrimary');
+    const hintDiv = document.getElementById('authHint');
+    const mode = primaryButton?.dataset.mode || 'signin';
+    
+    if (!username || !password) {
+        if(hintDiv) hintDiv.textContent = 'Please enter both username and password.';
+        return;
+    }
+    
+    if(hintDiv) hintDiv.textContent = 'Processing...';
+
+    if (mode === 'signin') {
+        const user = findUserByUsername(username);
+        
+        if (user && user.password === password) {
+            // Successful login logic
+            const status = user.approved === false || user.status === 'Pending' ? 'Pending' : user.status;
+
+            if (!user.approved || status === 'Pending') {
+                if(hintDiv) hintDiv.innerHTML = `Login successful, but your account is **pending admin approval**. Role: ${user.role}.`;
+                addLog('Sign in', 'Pending Approval', user);
+                // Still set session briefly so a "pending" user can see limited UI, but clear it after a short delay
+                setSession(user);
+                refreshUI();
+                setTimeout(() => { clearSession(); refreshUI(); }, 5000); 
+            } else if (status === 'Inactive' || status === 'Superseded') {
+                if(hintDiv) hintDiv.textContent = `Account is currently ${status}. Please contact your administrator.`;
+                addLog('Sign in', `Account ${status}`, user);
+            } else {
+                // Fully successful login
+                if(hintDiv) hintDiv.textContent = `Welcome back, ${user.name}!`;
+                setSession(user);
+                addLog('Sign in', 'Success', user);
+                closeAuth();
+                refreshUI();
+            }
+        } else {
+            // Invalid credentials logic
+            const foundUser = findUserByUsername(username);
+            const userStatus = foundUser ? ` but found user: ${foundUser.name}` : '';
+            addLog('Sign in', `Failure (Invalid credentials)${userStatus}`, { user_name: username, name: 'Anonymous' });
+            
+            const message = foundUser 
+                ? 'Invalid password. Please contact CDIO team for assistance.'
+                : 'Invalid username or password. Please contact CDIO team for assistance.';
+
+            if(hintDiv) hintDiv.innerHTML = `
+                <span style="color:var(--amber); font-weight:700;">${message}</span>
+            `;
+        }
+
+    } else if (mode === 'signup') {
+        const existingUser = findUserByUsername(username);
+
+        if (existingUser) {
+            if(hintDiv) hintDiv.textContent = 'A user with this username already exists. Please sign in instead.';
+            return;
+        }
+
+        const newUser = {
+            name: username, 
+            user_name: username,
+            password: password,
+            role: 'Contributor', 
+            last_updated: new Date().toISOString(),
+            approved: false,
+            status: 'Pending',
+            approved_by: 'Self-Registered',
+            modified: true // Flag that this is a client-side record
+        };
+
+        ALL_USERS.push(newUser);
+        saveClientUsers();
+
+        if(hintDiv) hintDiv.innerHTML = `Registration successful. Your account is **pending admin approval** for the **Contributor** role. You will be able to sign in once approved.`;
+        addLog('Sign up', 'Pending Approval', newUser);
+        if(primaryButton) primaryButton.disabled = true;
+        
+        // Switch the modal back to sign-in after a delay
+        setTimeout(() => { 
+            if(primaryButton) primaryButton.disabled = false; 
+            openAuth('signin'); 
+        }, 5000);
+    }
+}
+
+
+/* ================== ADMIN USER MANAGEMENT LOGIC ================== */
+
+const ADMIN_EDIT_FORM_HTML = `
+  <input type="hidden" id="editOriginalUsername">
+  <label for="editName">Name</label>
+  <input type="text" id="editName" placeholder="User's Name" required>
+  <label for="editUsername">VM Username</label>
+  <input type="text" id="editUsername" placeholder="VM Username (AKU email prefix or alias)" required>
+  <label for="editPassword">Password (Change only if needed)</label>
+  <input type="text" id="editPassword" placeholder="New Password (Leave blank to keep current)">
+  <label for="editRole">Role</label>
+  <select id="editRole">
+    <option value="Admin">Admin</option>
+    <option value="Contributor">Contributor</option>
+    <option value="Viewer">Viewer</option>
+  </select>
+  <label for="editStatus">Status</label>
+  <select id="editStatus">
+    <option value="Active">Active</option>
+    <option value="Inactive">Inactive</option>
+    <option value="Pending" disabled>Pending (Admin Approval)</option>
+    <option value="Superseded" disabled>Superseded (Previous Record)</option>
+  </select>
+  <div class="muted" id="editHint"></div>
+  <div class="modal-actions">
+    <button type="submit" id="editPrimary" class="btn-dark">Save Changes</button>
+    <button type="button" id="editCancel" class="btn-ghost">Cancel</button>
+  </div>
+`;
+
+function openEditUser(username) {
+    const user = findUserByUsername(username);
+    if (!user) return alert('User not found.');
+
+    authTitle.textContent = `Edit User: ${user.name}`;
+    authForm.innerHTML = ADMIN_EDIT_FORM_HTML;
+    
+    // Populate form fields
+    document.getElementById('editOriginalUsername').value = user.user_name;
+    document.getElementById('editName').value = user.name;
+    document.getElementById('editUsername').value = user.user_name;
+    document.getElementById('editRole').value = user.role;
+    document.getElementById('editStatus').value = user.status === 'Pending' ? 'Inactive' : user.status; // Cannot set status to Pending/Superseded manually
+
+    // Re-attach submit/cancel handlers
+    authForm.removeEventListener('submit', handleAuthSubmit);
+    authForm.addEventListener('submit', handleEditUserSubmit);
+    document.getElementById('editCancel').addEventListener('click', closeAuth);
+    authModal.classList.add('show');
+}
+
+function handleEditUserSubmit(e) {
+    e.preventDefault();
+    const hintDiv = document.getElementById('editHint');
+    if(hintDiv) hintDiv.textContent = 'Processing...';
+
+    const originalUsername = document.getElementById('editOriginalUsername').value;
+    const originalUser = findUserByUsername(originalUsername);
+
+    if (!originalUser) {
+        if(hintDiv) hintDiv.textContent = 'Error: Original user not found.';
+        return;
+    }
+
+    const newUsername = (document.getElementById('editUsername').value || '').trim();
+    const newName = (document.getElementById('editName').value || '').trim();
+    const newPassword = (document.getElementById('editPassword').value || '').trim();
+    const newRole = document.getElementById('editRole').value;
+    const newStatus = document.getElementById('editStatus').value;
+    
+    // Check for duplicate username on change
+    if (newUsername.toLowerCase() !== originalUsername.toLowerCase() && findUserByUsername(newUsername)) {
+        if(hintDiv) hintDiv.textContent = `Error: Username '${newUsername}' already exists.`;
+        return;
+    }
+    
+    // 1. Inactivate/Supersede the old record
+    const supersededUser = {
+        ...originalUser,
+        status: 'Superseded',
+        approved: false,
+        last_updated: new Date().toISOString(),
+        approved_by: currentUser()?.name || 'Admin',
+        modified: true
+    };
+    
+    // 2. Create the new record
+    const updatedUser = {
+        ...originalUser,
+        name: newName,
+        user_name: newUsername,
+        password: newPassword || originalUser.password, // Keep old password if new one is blank
+        role: newRole,
+        last_updated: new Date().toISOString(),
+        modified: true
+    };
+
+    let logMessage = '';
+
+    // If username, password, or role changed, force new record to 'Inactive' for approval
+    if (newUsername.toLowerCase() !== originalUsername.toLowerCase() || newPassword || newRole !== originalUser.role) {
+        updatedUser.status = 'Inactive';
+        updatedUser.approved = false; // Must be re-approved
+        logMessage = `Admin updated credentials/role for '${originalUsername}'. New status set to Inactive.`;
+        
+        // Add superseded record to ALL_USERS
+        ALL_USERS = ALL_USERS.filter(u => u.user_name.toLowerCase() !== originalUsername.toLowerCase());
+        ALL_USERS.push(supersededUser);
+        
     } else {
-      const u = store.users[i];
-      if (u.role !== 'admin' || u.status !== 'approved') {
-        u.role = 'admin'; u.status = 'approved'; changed = true;
-      }
+        // Only name or status changed
+        updatedUser.status = newStatus;
+        updatedUser.approved = newStatus === 'Active';
+        logMessage = `Admin updated name/status for '${originalUsername}' to ${newStatus}.`;
+        
+        // Remove old record
+        ALL_USERS = ALL_USERS.filter(u => u.user_name.toLowerCase() !== originalUsername.toLowerCase());
     }
-  }
-  upsertAdmin('rais.muhammad@aku.edu','Rais Muhammad','pass@123');
-  upsertAdmin('derick.imbati@aku.edu','Derick Imbati','pass@123');
-  if (changed) await putJSON(BLOB.USERS, store.users);
+    
+    // Add the new/updated record
+    ALL_USERS.push(updatedUser);
+    saveClientUsers(); 
+
+    addLog('Admin: Edit User', logMessage, currentUser());
+    if(hintDiv) hintDiv.innerHTML = `Changes saved! ${logMessage}`;
+
+    setTimeout(() => {
+        closeAuth();
+        renderUserTable();
+        refreshUI();
+    }, 2000);
 }
 
-/* ================== LOAD & SAVE ================== */
-async function loadAll(){
-  await ensureContainer();
-  store.users    = await getJSON(BLOB.USERS)    || [];
-  await reconcileDefaultAdmins();               // ensures admins always present
-  store.logs     = await getJSON(BLOB.LOGS)     || [];
-  store.state    = await getJSON(BLOB.STATE)    || {state:'stopped', lastChange:0};
-  store.requests = await getJSON(BLOB.REQUESTS) || [];
-}
-async function saveUsers(){ return putJSON(BLOB.USERS, store.users); }
-async function saveLogs(){ return putJSON(BLOB.LOGS, store.logs.slice(0,MAX_LOGS)); }
-async function saveState(){ return putJSON(BLOB.STATE, store.state); }
-async function saveRequests(){ return putJSON(BLOB.REQUESTS, store.requests); }
+// Function to handle the admin user management table logic
+function renderUserTable() {
+    const container = document.getElementById('userTable');
+    if (!container) return;
 
-/* ================== AUTH (MODAL) ================== */
-let authMode = 'signin';
-function openAuth(mode){
-  authMode = mode;
-  authModal.classList.add('show');
-  authTitle.textContent = mode==='signin' ? 'Sign in' : 'Create account';
-  authPrimary.textContent = mode==='signin' ? 'Sign in' : 'Create account';
-  authSwap.textContent = mode==='signin' ? 'Need an account?' : 'Have an account?';
-  nameLabel.style.display = nameInput.style.display = (mode==='signup') ? 'block' : 'none';
-  pwHint.textContent = mode==='signup' ? '(min 8 characters)' : '';
-  emailInput.value=''; passInput.value=''; nameInput.value=''; authHint.textContent='';
-}
-function closeAuth(){ authModal.classList.remove('show'); }
-authClose.addEventListener('click', e=>{e.preventDefault(); closeAuth();});
-authSwap.addEventListener('click', ()=> openAuth(authMode==='signin'?'signup':'signin'));
+    const allUsers = getUsers().sort((a, b) => {
+        // Sort by Pending/Inactive first, then by role, then by name
+        const statusOrder = { 'Pending': 1, 'Inactive': 2, 'Superseded': 3, 'Active': 4 };
+        if (statusOrder[a.status] < statusOrder[b.status]) return -1;
+        if (statusOrder[a.status] > statusOrder[b.status]) return 1;
+        return a.user_name.localeCompare(b.user_name);
+    });
 
-authPrimary.addEventListener('click', async ()=>{
-  const email = (emailInput.value||'').trim().toLowerCase();
-  const pass  = (passInput.value||'');
-  if(!email || !pass || (authMode==='signup' && !nameInput.value.trim())){
-    authHint.textContent='Please fill all fields.'; return;
-  }
-  if(authMode==='signup' && pass.length<8){
-    authHint.textContent='Password must be at least 8 characters.'; return;
-  }
+    let tableHtml = `<div class="table">
+        <div class="row" style="background:#eef7ff; font-weight:700;">
+            <div>Name / Username</div>
+            <div>Role</div>
+            <div>Status</div>
+            <div>Actions</div>
+        </div>`;
 
-  const existing = store.users.find(u => (u.email||'').toLowerCase() === email);
+    allUsers.forEach(user => {
+        const isPendingOrInactive = user.status === 'Pending' || user.status === 'Inactive';
+        const isSuperseded = user.status === 'Superseded';
+        const badgeClass = isSuperseded ? 'badge-superseded' : (isPendingOrInactive ? 'badge-pending' : 'badge-approved');
+        const badgeText = isSuperseded ? 'Superseded' : (user.status === 'Pending' ? 'Pending Approval' : user.status);
 
-  if(authMode==='signup'){
-    if(existing){ authHint.textContent='Email already exists.'; return; }
-    const user = {
-      id:(crypto?.randomUUID?.() || 'u' + Math.random().toString(36).slice(2,10)),
-      name:nameInput.value.trim(), email, pass, role:'viewer', status:'pending', createdAt:Date.now()
-    };
-    store.users.push(user); await saveUsers();
-    setSession({userId:user.id});
-    await addLog('Signup','Pending approval', user);
-    closeAuth(); refreshUI();
-  }else{
-    if(!existing || existing.pass !== pass){
-      authHint.textContent='Invalid credentials.'; return;
-    }
-    setSession({userId:existing.id});
-    await addLog('Sign in','Success', existing);
-    closeAuth(); refreshUI();
-  }
-});
+        const isEditable = !isSuperseded;
+        
+        let actions = isEditable ? 
+            `<button class="btn primary btn-sm" onclick="openEditUser('${user.user_name}')"><i class="fa-solid fa-pen-to-square"></i> Edit</button>` :
+            `<span style="color:#475569; font-size:.85rem;">Record Closed</span>`;
 
-/* Avatar menu */
-function toggleMenu(){ userMenu.classList.toggle('show'); }
-function closeMenu(){ userMenu.classList.remove('show'); }
-avatar.addEventListener('click', ()=>{ toggleMenu(); });
-document.addEventListener('click', (e)=>{ if(!e.target.closest('.header-right')) closeMenu(); });
-
-miSignIn.addEventListener('click', ()=>{ openAuth('signin'); closeMenu(); });
-miSignUp.addEventListener('click', ()=>{ openAuth('signup'); closeMenu(); });
-miProfile.addEventListener('click', ()=>{ openProfile(); closeMenu(); });
-miLogout.addEventListener('click', async ()=>{
-  const u = currentUser();
-  clearSession();
-  await addLog('Sign out','Success', u||undefined);
-  closeMenu(); refreshUI();
-});
-
-/* ================== PROFILE ================== */
-function currentUser(){
-  const s = getSession(); if(!s) return null;
-  return store.users.find(u=>u.id===s.userId) || null;
-}
-function openProfile(){
-  const u = currentUser(); if(!u){ openAuth('signin'); return; }
-  pName.value = u.name||''; pEmail.value = u.email||''; pPass.value=''; pRequest.value=''; pMsg.value='';
-  profileModal.classList.add('show');
-}
-function closeProfile(){ profileModal.classList.remove('show'); }
-profileClose.addEventListener('click', e=>{ e.preventDefault(); closeProfile(); });
-
-document.getElementById('btnSaveProfile').addEventListener('click', async ()=>{
-  const u = currentUser(); if(!u) return;
-  u.name = pName.value.trim() || u.name;
-  if(pPass.value){
-    if(pPass.value.length<8){ alert('Password must be at least 8 characters.'); return; }
-    u.pass = pPass.value;
-  }
-  await saveUsers();
-  await addLog('Profile updated','Success', u);
-  closeProfile(); refreshUI();
-});
-
-document.getElementById('btnRequestRole').addEventListener('click', async ()=>{
-  const u = currentUser(); if(!u) return;
-  const targetRole = pRequest.value;
-  if(!targetRole){ alert('Select a role to request.'); return; }
-  const msg = (pMsg.value||'').trim();
-  store.requests.unshift({id:(crypto?.randomUUID?.() || 'r'+Math.random().toString(36).slice(2,10)), userId:u.id, targetRole, msg, ts:Date.now(), status:'open'});
-  await saveRequests();
-  await addLog('Permission request', `${u.email}: → ${targetRole}`, u);
-  alert('Your request has been sent to admins.');
-  closeProfile();
-  renderUserTable();
-});
-
-/* ================== LOGS ================== */
-async function addLog(action, result, byUser){
-  const by = byUser ? byUser.email : (currentUser()?.email || 'anonymous');
-  store.logs.unshift({ts:nowStr(), action, result, by});
-  store.logs = store.logs.slice(0, MAX_LOGS);
-  await saveLogs();
-  renderLogs();
-}
-function renderLogs(){
-  const logs = store.logs;
-  loglist.innerHTML = logs.length
-    ? logs.map(l=>`<div class="logitem">[${l.ts}] ${l.action} — ${l.result} <span style="opacity:.75">(${l.by})</span></div>`).join('')
-    : '<div class="logitem">No activity yet.</div>';
-}
-
-/* ================== VM STATE & ACTIONS ================== */
-function setStatusUI(state, msg, loading = false) {
-  statusBox.classList.remove('ok', 'stopped');
-  
-  // Only add status class if we have a valid state
-  if (state === 'running') statusBox.classList.add('ok');
-  if (state === 'stopped') statusBox.classList.add('stopped');
-  
-  statusSpinner.style.display = loading ? 'inline-block' : 'none';
-  
-  // Show welcome message when no specific status is set
-  if (!state && !msg) {
-    statusText.textContent = 'Welcome to Uzima VM Control';
-  } else {
-    statusText.textContent = msg || `VM is ${state}`;
-  }
-  
-  countEl.textContent = '';
-  
-  const u = currentUser();
-  const role = u?.role || 'viewer';
-  const approved = (u?.status === 'approved');
-  
-  // Disable buttons during loading
-  if (loading) {
-    btnStart.disabled = btnStop.disabled = true;
-  } else {
-    // Only enable start if VM is not running and user has permission
-    btnStart.disabled = !(approved && (role === 'admin' || role === 'contributor') && state !== 'running');
-    // Only enable stop if VM is running and user is admin
-    btnStop.disabled = !(approved && role === 'admin' && state === 'running');
-  }
-}
-async function finalizeState(state){
-  store.state.state = state;
-  store.state.lastChange = Date.now();
-  await saveState();
-  setStatusUI(state, `VM is ${state}`);
-}
-function startCountdown(ms,onDone){
-  const start=Date.now();
-  function tick(){
-    const remain=Math.max(0, ms-(Date.now()-start));
-    const mm=String(Math.floor(remain/60000));
-    const ss=String(Math.floor((remain%60000)/1000)).padStart(2,'0');
-    countEl.textContent=` (${mm}:${ss})`;
-    if(remain<=0){ clearInterval(t); countEl.textContent=''; onDone(); }
-  }
-  tick(); const t=setInterval(tick,1000);
-}
-async function callWebhook(url, actionName) {
-    const startTime = Date.now();
-    const logError = async (message, error = null) => {
-        console.error(`[${actionName}] ${message}`, error || '');
-        await addLog(
-            `${actionName} VM`, 
-            `${message}${error ? `: ${error.message || error}` : ''}`, 
-            currentUser()
-        );
-    };
-
-    try {
-        // Try direct fetch first
-        let response;
-        try {
-            console.log(`[${actionName}] Attempting direct request to:`, url);
-            response = await fetch(url, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                mode: 'cors'
-            });
-        } catch (directError) {
-            console.log(`[${actionName}] Direct request failed, trying with CORS proxy`);
-            // Fallback to CORS proxy
-            try {
-                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
-                console.log(`[${actionName}] Using CORS proxy:`, proxyUrl);
-                response = await fetch(proxyUrl, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'}
-                });
-            } catch (proxyError) {
-                await logError('Both direct and proxy requests failed', proxyError);
-                throw new Error('Network error - could not reach the server. Please check your connection.');
-            }
+        if (isPendingOrInactive) {
+            actions = `<button class="btn-dark btn-sm" onclick="approveUser('${user.user_name}')">Approve</button> ${actions}`;
         }
 
-        const responseTime = Date.now() - startTime;
-        console.log(`[${actionName}] Response (${response.status}) in ${responseTime}ms`);
-        
-        const responseText = await response.text();
-        console.log(`[${actionName}] Response body:`, responseText);
-        
+
+        tableHtml += `
+            <div class="row user-row" data-user-username="${user.user_name}">
+                <div>
+                    <strong>${user.name}</strong><br>
+                    <span style="font-size:.85rem; color:#475569;">${user.user_name}</span>
+                </div>
+                <div>${user.role}</div>
+                <div><span class="badge-status ${badgeClass}">${badgeText}</span></div>
+                <div>${actions}</div>
+            </div>
+        `;
+    });
+
+    tableHtml += '</div>';
+    container.innerHTML = tableHtml;
+}
+
+// Admin Action function (Approve)
+function approveUser(username) {
+    const userToApprove = findUserByUsername(username);
+
+    if (userToApprove && (userToApprove.status === 'Pending' || userToApprove.status === 'Inactive')) {
+        userToApprove.approved = true;
+        userToApprove.status = 'Active';
+        userToApprove.last_updated = new Date().toISOString();
+        userToApprove.approved_by = currentUser()?.name || 'Admin';
+        userToApprove.modified = true;
+
+        saveClientUsers();
+
+        // Log and refresh
+        addLog('Admin: User Approval', `User ${username} approved for role ${userToApprove.role}`, currentUser());
+        renderUserTable();
+        alert(`User ${userToApprove.name} (${username}) has been approved and is now Active.`);
+    } else {
+        alert(`Could not find pending/inactive user with username: ${username}`);
+    }
+}
+
+/* ================== UTILITIES & UI (Preserved/Updated) ================== */
+
+function initials(str) {
+    if (!str) return 'U';
+    const parts = str.split('.');
+    if (parts.length > 1) {
+        return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
+    return str[0].toUpperCase();
+}
+
+function addLog(action, result, user) {
+    const logUser = user && user.user_name ? { name: user.name || user.user_name, user_name: user.user_name } : (user && user.user_name ? user : null);
+    
+    const logEntry = {
+        ts: new Date().toISOString(), 
+        action: action,
+        result: result,
+        by: logUser ? (logUser.name || logUser.user_name) : 'System',
+        userName: logUser ? logUser.user_name : 'system',
+        userAgent: navigator.userAgent
+    };
+    
+    store.logs.unshift(logEntry);
+    renderLogs();
+
+    if (logUser && logUser.user_name) {
+        logToAzureBlob(logEntry, logUser.user_name);
+    } else {
+        logToAzureBlob(logEntry, 'system-unauthenticated');
+    }
+}
+
+async function logToAzureBlob(logEntry, userName) {
+    try {
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const sanitizedUserName = userName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        const blobName = `logs/${sanitizedUserName}/${timestamp}-${Math.random().toString(36).substring(2, 9)}.json`;
+        const blobUrl = `${AZURE_BLOB_BASE_URL}${LOG_CONTAINER_NAME}/${blobName}${LOG_SAS_TOKEN}`;
+        const content = JSON.stringify(logEntry, null, 2);
+
+        const response = await fetch(blobUrl, {
+            method: 'PUT',
+            headers: {
+                'x-ms-blob-type': 'BlockBlob', 
+                'Content-Type': 'application/json',
+                'Content-Length': content.length,
+            },
+            body: content,
+        });
+
         if (!response.ok) {
-            throw new Error(`Server responded with status ${response.status}: ${responseText || 'No details'}`);
+            throw new Error(`Blob upload failed: ${response.status} ${response.statusText}`);
         }
+        console.log(`Log entry for ${userName} successfully uploaded to Azure Blob.`);
 
-        await logError('Request successful');
-        return responseText;
-        
-    } catch (error) {
-        await logError('Request failed', error);
-        throw error;
+    } catch (e) {
+        console.error('Failed to log to Azure Blob:', e);
+        logLine(`[ERROR: Azure Log Failed] ${e.message}`);
     }
 }
-async function startVM() {
+
+function logLine(text) {
+    const logEntry = { ts: new Date().toISOString(), action: 'UI/Error', result: text, by: 'Client', userName: 'client-js' };
+    store.logs.unshift(logEntry);
+    renderLogs();
+}
+
+function startCooldown(seconds, targetState) {
+    // ... (Cooldown logic remains the same)
     const u = currentUser();
-    if (!u || u.status !== 'approved') {
-        await addLog('Start VM', 'Access denied: Not authorized', u);
+    const endTime = new Date(Date.now() + seconds * 1000);
+    store.cooldownEnd = endTime;
+    store.cooldownTargetState = targetState;
+    localStorage.setItem('cooldownEnd', endTime.getTime());
+    localStorage.setItem('cooldownTargetState', targetState);
+    
+    if (countdownTimer) clearInterval(countdownTimer);
+
+    countdownTimer = setInterval(() => {
+        updateCountdown(u);
+    }, 1000);
+    
+    updateCountdown(u);
+}
+
+function updateCountdown(u) {
+    // ... (Cooldown logic remains the same)
+    const now = Date.now();
+    const remaining = store.cooldownEnd ? store.cooldownEnd.getTime() - now : 0;
+    
+    if (remaining <= 0) {
+        completeCooldownAction(u);
+        clearInterval(countdownTimer);
+        countdownTimer = null;
         return;
     }
-    if (!(u.role === 'admin' || u.role === 'contributor')) {
-        await addLog('Start VM', 'Access denied: Insufficient permissions', u);
-        return;
+
+    const seconds = Math.ceil(remaining / 1000);
+    
+    let message = '';
+    if (store.cooldownTargetState === 'running') {
+        message = `VM Start in progress... Check in ${seconds}s`;
+    } else if (store.cooldownTargetState === 'stopped') {
+        message = `VM Stop in progress... Check in ${seconds}s`;
+    } else if (store.cooldownTargetState === 'jit') {
+        message = `Access Update Sent. Finalizing in ${seconds}s...`;
+    } else {
+        message = `Cooldown: ${seconds}s remaining`;
     }
     
-    // Prevent starting if already running
-    if (store.state.state === 'running') {
-        setStatusUI('running', 'VM is already running');
-        return;
+    setStatusUI('cooldown', message, false);
+}
+
+function checkCooldown() {
+    // ... (Cooldown logic remains the same)
+    const storedEnd = localStorage.getItem('cooldownEnd');
+    const storedTarget = localStorage.getItem('cooldownTargetState');
+    
+    if (storedEnd && storedTarget) {
+        const endTime = new Date(parseInt(storedEnd, 10));
+        if (endTime.getTime() > Date.now()) {
+            store.cooldownEnd = endTime;
+            store.cooldownTargetState = storedTarget;
+            const u = currentUser();
+            startCooldown(Math.ceil((endTime.getTime() - Date.now()) / 1000), storedTarget);
+            return true;
+        } else {
+            const u = currentUser();
+            store.cooldownEnd = endTime; 
+            store.cooldownTargetState = storedTarget;
+            completeCooldownAction(u);
+        }
+    }
+    return false;
+}
+
+function completeCooldownAction(u) {
+    // ... (Cooldown logic remains the same)
+    let completionMessage = 'Action completed (State unknown)';
+    if (store.cooldownTargetState) {
+        if (store.cooldownTargetState === 'running') {
+            completionMessage = '✅ VM is now **Running** (Expected state).';
+            store.state.state = 'running';
+            store.state.raw = completionMessage;
+            addLog('Start VM', 'Completed (Expected state)', u);
+        } else if (store.cooldownTargetState === 'stopped') {
+            completionMessage = '🛑 VM is now **Stopped** (Expected state).';
+            store.state.state = 'stopped';
+            store.state.raw = completionMessage;
+            addLog('Stop VM', 'Completed (Expected state)', u);
+        } else if (store.cooldownTargetState === 'jit') {
+            showPostJitInstruction(u);
+            completionMessage = '🔒 Access Update Sent. Check the troubleshooting pop-up for next steps.';
+            store.state.state = store.state.state; 
+            store.state.raw = completionMessage;
+            addLog('Troubleshoot Access', 'Server-side action completed', u);
+        }
     }
 
-    try {
-        setStatusUI('starting', 'Starting VM...', true);
-        await addLog('Start VM', 'Initiating VM start...', u);
-        
-        // Add a timeout for the webhook call (increased to 2 minutes for Azure Automation)
-        const timeoutPromise = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Request timed out after 2 minutes')), 120000)
-        );
-        
-        // Race the webhook call against the timeout
-        await Promise.race([
-            callWebhook(START_WEBHOOK_URL, 'Start'),
-            timeoutPromise
-        ]);
-        
-        // If we get here, the webhook call succeeded
-        await addLog('Start VM', 'VM start command sent successfully', u);
-        
-        // Show a countdown while waiting for VM to start
-        let secondsLeft = 30;
-        const countdown = setInterval(() => {
-            if (secondsLeft > 0) {
-                statusText.textContent = `Starting VM... (${secondsLeft}s)`;
-                secondsLeft--;
-            } else {
-                clearInterval(countdown);
-            }
-        }, 1000);
-        
-        // Finalize after delay
-        setTimeout(async () => {
-            clearInterval(countdown);
-            await finalizeState('running');
-            await addLog('Start VM', 'VM is now running', u);
-        }, 30000);
-        
-    } catch (error) {
-        console.error('Error in startVM:', error);
-        setStatusUI('error', `Failed to start VM: ${error.message}`);
-        await addLog('Start VM', `Failed: ${error.message}`, u);
+    store.cooldownEnd = null;
+    store.cooldownTargetState = null;
+    localStorage.removeItem('cooldownEnd');
+    localStorage.removeItem('cooldownTargetState');
+
+    setStatusUI(store.state.state, completionMessage, false);
+
+    if (store.cooldownTargetState !== 'jit') {
+        setTimeout(checkStatusNow, 2000);
     }
 }
-async function stopVM() {
+
+
+function refreshAvatar() {
     const u = currentUser();
-    if (!u || u.status !== 'approved') {
-        await addLog('Stop VM', 'Access denied: Not authorized', u);
-        return;
+    avatar.textContent = initials(u ? (u.name || u.username) : 'Uzima');
+    const userRole = u?.role || 'Viewer';
+    const userStatus = u?.status || '';
+
+    let menuStatus = '';
+    if(u) {
+        menuStatus = `${userRole}${userStatus !== 'Active' ? ` (${userStatus})` : ''}`;
     }
-    if (u.role !== 'admin') {
-        await addLog('Stop VM', 'Access denied: Admin role required', u);
-        return;
+
+    menuName.textContent = u ? `${u.name || u.username} · ${menuStatus}` : 'Not signed in';
+    miSignIn.style.display = u ? 'none' : 'flex';
+    miSignUp.style.display = u ? 'none' : 'flex';
+    miProfile.style.display = u ? 'flex' : 'none';
+    miLogout.style.display = u ? 'flex' : 'none';
+}
+
+function setUserLine() {
+    const u = currentUser();
+    userLineText.textContent = u ? `${u.name || u.username} · ${u.role}` : 'Not signed in';
+    userLineSep.style.display = u ? 'inline' : 'none';
+    userLogout.style.display = u ? 'inline' : 'none';
+}
+
+function renderLogs() {
+    if (!loglist) return;
+    loglist.innerHTML = store.logs.map(log => {
+        const time = new Date(log.ts).toLocaleTimeString();
+        const user = log.by === 'System' ? 'System' : `[${log.by}]`;
+        return `<div class="logitem"><span style="color:#64748b; margin-right:8px;">${time}</span> <strong>${log.action}:</strong> ${log.result} ${log.userName !== 'system' && log.userName !== 'client-js' ? `(${user})` : ''}</div>`;
+    }).join('');
+    if(rawLog) rawLog.textContent = JSON.stringify(store.logs, null, 2);
+}
+
+function setStatusUI(norm, raw, loading = false) {
+    if (!statusBox || !statusSpinner || !statusText) return;
+
+    statusBox.classList.remove('ok', 'stopped'); 
+    
+    if (norm === 'running' || norm === 'cooldown' || raw.includes('Running') || raw.includes('JIT Access') || raw.includes('Start in progress')) statusBox.classList.add('ok');
+    if (norm === 'stopped' || raw.includes('Stopped') || raw.includes('Deallocated') || norm === 'error' || raw.includes('Stop in progress')) statusBox.classList.add('stopped');
+    
+    const isApiLoading = loading && (norm !== 'cooldown');
+    statusSpinner.style.display = isApiLoading ? 'inline-block' : 'none';
+
+    statusText.innerHTML = `VM status: ${raw || '(unknown)'}`;
+    
+    const u = currentUser();
+    const role = u?.role || 'viewer';
+    const approved = (u?.status === 'Active'); 
+    
+    const isAuthorized = approved && (role === 'Admin' || role === 'Contributor');
+    const isAdmin = approved && role === 'Admin';
+    const isRunning = norm === 'running';
+    const isStopped = norm === 'stopped';
+    const isCoolingDown = store.cooldownEnd && (store.cooldownEnd.getTime() > Date.now());
+
+    const canCheck = !!u && !isCoolingDown;
+    const canStart = !isCoolingDown && isAuthorized && !isRunning;
+    const canStop = !isCoolingDown && isAdmin && !isStopped;
+    const canTroubleshoot = !isCoolingDown && isAuthorized; 
+
+    if(btnCheck) btnCheck.disabled = !canCheck;
+    if(btnStart) btnStart.disabled = !canStart;
+    if(btnStop) btnStop.disabled = !canStop;
+    if(btnAccessTroubleshoot) btnAccessTroubleshoot.disabled = !canTroubleshoot;
+    
+    if (isCoolingDown) {
+        if(btnStart) btnStart.textContent = 'Starting (cooldown...)';
+        if(btnStop) btnStop.textContent = 'Stopping (cooldown...)';
+        if(btnAccessTroubleshoot) btnAccessTroubleshoot.textContent = 'Accessing (cooldown...)';
+    } else {
+        if(btnStart) btnStart.innerHTML = '<i class="fa-solid fa-power-off"></i> Start VM';
+        if(btnStop) btnStop.innerHTML = '<i class="fa-solid fa-stop"></i> Stop VM';
+        if(btnAccessTroubleshoot) btnAccessTroubleshoot.innerHTML = '<i class="fa-solid fa-screwdriver-wrench"></i> Access Troubleshoot';
+    }
+}
+
+function refreshUI() {
+    const u = currentUser();
+    const isAdmin = u?.role === 'Admin' && u?.status === 'Active';
+
+    if (u && u.status === 'Active') {
+        gate.style.display = 'none';
+        app.style.display = 'flex';
+        if (!checkCooldown()) {
+            checkStatusNow();
+        }
+    } else {
+        gate.style.display = 'grid';
+        app.style.display = 'none';
+    }
+
+    const adminSection = document.getElementById('sec-admin');
+    if(adminSection) {
+        adminSection.style.display = isAdmin ? 'block' : 'none';
+        if (isAdmin) {
+            renderUserTable();
+        }
+    }
+
+    refreshAvatar();
+    setUserLine();
+    renderLogs();
+}
+
+function showPostJitInstruction(user) {
+    if (!authModal || !user) return;
+    
+    const instructionHtml = `
+        <p><strong>Step 1: The Azure API action is complete.</strong> Your public IP is now whitelisted for the next **${ACTION_COOLDOWN_SECONDS / 60} minutes**.</p>
+        <p><strong>Step 2: Connect to the VM.</strong> Use a Remote Desktop Protocol (RDP) client to connect to the VM's public IP address (provided separately).</p>
+        <h4 style="margin-top:10px; font-weight:700;">Troubleshooting</h4>
+        <p>If you cannot connect, your local firewall or network security might be blocking the connection. You can use the following command in your local command prompt or terminal to check for local port conflicts (do not use this command on the VM itself):</p>
+        <div style="background:#f1f5f9; padding:10px; border-radius:8px; margin:10px 0; font-family:monospace; font-weight:700; overflow-x:auto;"> 
+             netstat -ano | findstr :3389
+        </div>
+        <p>If the command returns **any line** showing a process listening on port 3389, a local application (like a different RDP client) is blocking the connection. You must close that application and try connecting again.</p>
+        <p style="color:#d97706; font-weight:700; margin-top:10px;">If the command returns NO lines or you still cannot connect after 5 minutes, please contact the CDIO Team for further assistance.</p>
+        <div class="modal-actions" style="margin-top:16px; justify-content:center">
+            <button class="btn-ghost" onclick="closeAuth()">Close / I understand</button>
+        </div>
+    `;
+    authTitle.textContent = 'Post-Access Troubleshooting Steps';
+    authForm.innerHTML = instructionHtml;
+    
+    // Remove the default submit handler
+    authForm.removeEventListener('submit', handleAuthSubmit);
+    authModal.classList.add('show');
+}
+
+/* ================== VM CONTROL API FUNCTIONS (Preserved) ================== */
+
+async function proxyPost(url) {
+    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+    const response = await fetch(proxyUrl, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    });
+
+    if (!response.ok && response.status !== 202) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return "Webhook request sent successfully.";
+}
+
+async function retryProxyPost(url, actionName, user) {
+    for (let i = 0; i < MAX_RETRIES; i++) {
+        try {
+            logLine(`Attempting ${actionName} (Retry ${i + 1}/${MAX_RETRIES})...`);
+            await proxyPost(url);
+            addLog(actionName, 'Webhook Sent (Success)', user);
+            return;
+        } catch (error) {
+            const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
+            logLine(`Attempt ${i + 1} failed. Retrying in ${Math.round(delay / 1000)}s... Error: ${error.message}`);
+            if (i === MAX_RETRIES - 1) {
+                throw new Error(`Failed to send webhook after ${MAX_RETRIES} attempts. Last error: ${error.message}`);
+            }
+            await new Promise(resolve => setTimeout(resolve, delay));
+        }
+    }
+}
+
+async function checkStatusNow() {
+    const u = currentUser();
+    if (!u) {
+        return addLog('Check Status', 'Access Denied: Not signed in', null);
+    }
+    if (store.cooldownEnd && store.cooldownEnd.getTime() > Date.now()) {
+        return addLog('Check Status', `Denied: Action in cooldown (${Math.ceil((store.cooldownEnd.getTime() - Date.now()) / 1000)}s remaining)`, u);
     }
     
-    // Prevent stopping if already stopped
-    if (store.state.state !== 'running') {
-        setStatusUI(store.state.state || 'stopped', store.state.state ? `VM is already ${store.state.state}` : 'VM is not running');
-        return;
-    }
+    setStatusUI('checking', 'Checking VM status...', true);
+    apiLoading = true;
 
     try {
-        setStatusUI('stopping', 'Stopping VM...', true);
-        await addLog('Stop VM', 'Initiating VM stop...', u);
+        const timestamp = new Date().getTime();
+        const url = `${STATUS_FUNCTION_URL}checkvmstatus${STATUS_FUNCTION_URL.includes('?') ? '&' : '?'}_=${timestamp}`;
+
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            },
+            mode: 'cors', 
+            credentials: 'omit'
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status} ${response.statusText}`);
+        }
         
-        // Add a timeout for the webhook call (increased to 2 minutes for Azure Automation)
-        const timeoutPromise = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Request timed out after 2 minutes')), 120000)
-        );
+        const statusData = await response.json().catch(e => { throw new Error('Invalid JSON response from server'); });
+        if (!statusData) { throw new Error('Empty response from server'); }
+
+        const lastChecked = statusData.lastCheckedUtc ? new Date(statusData.lastCheckedUtc).toLocaleString() : new Date().toLocaleString();
+        const statusText = statusData.PowerStateDisplay || statusData.PowerState || 'Status unknown';
+        const statusMessage = `${statusText} (${lastChecked})`;
         
-        // Race the webhook call against the timeout
-        await Promise.race([
-            callWebhook(STOP_WEBHOOK_URL, 'Stop'),
-            timeoutPromise
-        ]);
+        let normalizedState = 'unknown';
+        const powerStateCode = (statusData.PowerState || statusText || '').toLowerCase();
         
-        // If we get here, the webhook call succeeded
-        await addLog('Stop VM', 'VM stop command sent successfully', u);
-        
-        // Show a countdown while waiting for VM to stop
-        let secondsLeft = 30;
-        const countdown = setInterval(() => {
-            if (secondsLeft > 0) {
-                statusText.textContent = `Stopping VM... (${secondsLeft}s)`;
-                secondsLeft--;
-            } else {
-                clearInterval(countdown);
-            }
-        }, 1000);
-        
-        // Finalize after delay
-        setTimeout(async () => {
-            clearInterval(countdown);
-            await finalizeState('stopped');
-            await addLog('Stop VM', 'VM is now stopped', u);
-        }, 30000);
+        if (powerStateCode.includes('running') || powerStateCode.includes('ready')) {
+            normalizedState = 'running';
+        } else if (powerStateCode.includes('deallocated') || powerStateCode.includes('stopped')) {
+            normalizedState = 'stopped';
+        } else if (powerStateCode.includes('starting')) {
+            normalizedState = 'starting';
+        } else if (powerStateCode.includes('stopping')) {
+            normalizedState = 'stopping';
+        }
+
+        store.state.state = normalizedState;
+        store.state.raw = statusMessage;
+        store.state.lastCheck = lastChecked;
+
+        addLog('Check Status', statusMessage, u);
+        setStatusUI(normalizedState, statusMessage, false);
         
     } catch (error) {
-        console.error('Error in stopVM:', error);
-        setStatusUI('error', `Failed to stop VM: ${error.message}`);
-        await addLog('Stop VM', `Failed: ${error.message}`, u);
+        const errorMsg = `Error checking status: ${error.message}`;
+        store.state.state = 'error';
+        store.state.raw = errorMsg;
+        addLog('Check Status', errorMsg, u);
+        setStatusUI('error', errorMsg, false);
+    } finally {
+        apiLoading = false;
     }
 }
-btnStart.onclick = startVM;
-btnStop.onclick  = stopVM;
 
-/* ================== ADMIN: APPROVALS & ROLES ================== */
-function renderUserTable(){
-  const m = currentUser();
-  const sec = document.getElementById('sec-admin');
-  if(!m || m.role!=='admin'){ sec.style.display='none'; return; }
-  sec.style.display='block';
+async function startVM(){
+    const u = currentUser();
+    if (!u || u.status !== 'Active' || (u.role !== 'Admin' && u.role !== 'Contributor')) {
+        return addLog('Start VM', 'Access Denied: Not authorized (Contributor or Admin role required)', u);
+    }
+    if (store.cooldownEnd && store.cooldownEnd.getTime() > Date.now()) {
+        return addLog('Start VM', `Denied: Action in cooldown (${Math.ceil((store.cooldownEnd.getTime() - Date.now()) / 1000)}s remaining)`, u);
+    }
 
-  const list = [...store.users].sort((a,b)=>a.createdAt-b.createdAt);
-  const reqs = [...store.requests].sort((a,b)=>b.ts-a.ts);
+    setStatusUI(store.state.state,'Starting VM (Sending webhook)...',true);
+    
+    try{
+        await retryProxyPost(START_WEBHOOK_URL, 'Start VM', u);
+        startCooldown(ACTION_COOLDOWN_SECONDS, 'running');
+        store.state.state = 'cooldown';
+        store.state.raw = 'VM Start request sent. Awaiting state change (60s cooldown)...';
+    } catch(e){
+        clearInterval(countdownTimer);
+        countdownTimer = null;
+        store.cooldownEnd = null;
+        store.cooldownTargetState = null;
+        localStorage.removeItem('cooldownEnd');
+        localStorage.removeItem('cooldownTargetState');
+        setStatusUI(store.state.state,`Fatal Error: ${e.message}`,false);
+        logLine(`Start error: ${e.message}`);
+    }
+}
 
-  const rowsUsers = list.map(u=>`
-    <div class="row">
-      <div>
-        <div style="font-weight:700">${u.name||'(no name)'}</div>
-        <div style="font-size:.9rem; color:#1f2937">${u.email}</div>
-      </div>
-      <div>
-        <span class="badge-status ${u.status==='approved'?'badge-approved':'badge-pending'}">${u.status==='approved'?'Approved':'Pending'}</span>
-      </div>
-      <div class="role">
-        <select aria-label="Role for ${u.email}" data-id="${u.id}" ${u.status!=='approved'?'disabled':''}>
-          <option value="viewer" ${u.role==='viewer'?'selected':''}>viewer</option>
-          <option value="contributor" ${u.role==='contributor'?'selected':''}>contributor</option>
-          <option value="admin" ${u.role==='admin'?'selected':''}>admin</option>
-        </select>
-      </div>
-      <div class="actions">
-        ${u.status!=='approved'
-          ? `<button class="btn-approve" data-approve="${u.id}">Approve</button>
-             <button class="btn-reject"  data-reject="${u.id}">Reject</button>`
-          : `<button class="btn-reject"  data-remove="${u.id}">Remove</button>`
+async function stopVM(){
+    const u = currentUser();
+    if (!u || u.status !== 'Active' || u.role !== 'Admin') {
+        return addLog('Stop VM', 'Access Denied: Not authorized (Admin role required)', u);
+    }
+    if (store.cooldownEnd && store.cooldownEnd.getTime() > Date.now()) {
+        return addLog('Stop VM', `Denied: Action in cooldown (${Math.ceil((store.cooldownEnd.getTime() - Date.now()) / 1000)}s remaining)`, u);
+    }
+
+    setStatusUI(store.state.state,'Stopping VM (Sending webhook)...',true);
+    
+    try{
+        await retryProxyPost(STOP_WEBHOOK_URL, 'Stop VM', u);
+        startCooldown(ACTION_COOLDOWN_SECONDS, 'stopped');
+        store.state.state = 'cooldown';
+        store.state.raw = 'VM Stop request sent. Awaiting state change (60s cooldown)...';
+    } catch(e){
+        clearInterval(countdownTimer);
+        countdownTimer = null;
+        store.cooldownEnd = null;
+        store.cooldownTargetState = null;
+        localStorage.removeItem('cooldownEnd');
+        localStorage.removeItem('cooldownTargetState');
+        setStatusUI(store.state.state,`Fatal Error: ${e.message}`,false);
+        logLine(`Stop error: ${e.message}`);
+    }
+}
+
+async function requestTroubleshootAccess(){
+    const u = currentUser();
+    if (!u || u.status !== 'Active' || (u.role !== 'Admin' && u.role !== 'Contributor')) {
+        return addLog('Troubleshoot Access', 'Access Denied: Not authorized', u);
+    }
+    if (store.cooldownEnd && store.cooldownEnd.getTime() > Date.now()) {
+        return addLog('Troubleshoot Access', `Denied: Action in cooldown (${Math.ceil((store.cooldownEnd.getTime() - Date.now()) / 1000)}s remaining)`, u);
+    }
+
+    const currentState = store.state.state;
+    setStatusUI(currentState,`Requesting access update (Sending webhook)...`,true);
+
+    try{
+        const jitUrlWithUser = `${JIT_WEBHOOK_URL}&user=${encodeURIComponent(u.username)}`;
+
+        await retryProxyPost(jitUrlWithUser, 'Troubleshoot Access', u);
+        
+        startCooldown(JIT_COOLDOWN_SECONDS, 'jit');
+        store.state.state = 'cooldown';
+        store.state.raw = 'Access update request sent. Awaiting confirmation...';
+        
+    } catch(e){
+        clearInterval(countdownTimer);
+        countdownTimer = null;
+        store.cooldownEnd = null;
+        store.cooldownTargetState = null;
+        localStorage.removeItem('cooldownEnd');
+        localStorage.removeItem('cooldownTargetState');
+        setStatusUI(currentState,`Fatal Error during Access Request: ${e.message}`,false);
+        logLine(`Troubleshoot error: ${e.message}`);
+    }
+}
+
+
+/* ================== INITIALIZATION ================== */
+document.addEventListener('DOMContentLoaded', () => {
+    // --- 0. Initialize User Data ---
+    initializeUsers();
+
+    // --- 1. Get DOM elements ---
+    gate = document.getElementById('gate');
+    app = document.getElementById('app');
+    avatar = document.getElementById('avatar');
+    userMenu = document.getElementById('userMenu');
+    menuName = document.getElementById('menuName');
+    miSignIn = document.getElementById('miSignIn');
+    miSignUp = document.getElementById('miSignUp');
+    miProfile = document.getElementById('miProfile');
+    miLogout = document.getElementById('miLogout');
+    userLogout = document.getElementById('userLogout');
+    userLineText = document.getElementById('userLineText');
+    userLineSep = document.getElementById('userLineSep');
+    
+    authModal = document.getElementById('authModal');
+    authTitle = document.getElementById('authTitle');
+    authClose = document.getElementById('authClose');
+    authForm = document.getElementById('authForm');
+    
+    reassignAuthElements(); // Assign usernameInput, passInput, etc.
+
+    btnCheck = document.getElementById('btnCheck');
+    statusBox = document.getElementById('statusBox');
+    statusSpinner = document.getElementById('statusSpinner');
+    statusText = document.getElementById('statusText');
+    btnStart = document.getElementById('btnStart');
+    btnStop = document.getElementById('btnStop');
+    btnAccessTroubleshoot = document.getElementById('btnAccessTroubleshoot');
+
+    loglist = document.getElementById('loglist');
+    rawLog = document.getElementById('rawLog');
+    userTable = document.getElementById('userTable');
+
+    // --- 2. Attach Event Listeners ---
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    avatar.addEventListener('click', () => userMenu.classList.toggle('show'));
+    document.addEventListener('click', (e) => {
+        if (!avatar.contains(e.target) && !userMenu.contains(e.target)) {
+            userMenu.classList.remove('show');
         }
-      </div>
-    </div>
-  `).join('') || '<div class="subtitle">No users yet.</div>';
-
-  const rowsReqs = reqs.length ? `
-    <h4 style="margin:10px 0 6px;font-family:Poppins,sans-serif;color:#0f172a">Role Requests</h4>
-    <div class="table">
-      ${reqs.map(r=>{
-        const u=list.find(x=>x.id===r.userId)||{};
-        return `
-        <div class="row">
-          <div>
-            <div style="font-weight:700">${u.name||'(unknown user)'}</div>
-            <div style="font-size:.9rem;color:#1f2937">${u.email||''}</div>
-            <div style="font-size:.85rem;color:#334155;opacity:.9">${r.msg?('“'+r.msg+'”'):'(no message)'}</div>
-          </div>
-          <div><span class="badge-status ${r.status==='open'?'badge-pending':'badge-approved'}">${r.status}</span></div>
-          <div class="role"><span style="font-weight:700">${r.targetRole}</span></div>
-          <div class="actions">
-            <button class="btn-approve" data-approve-req="${r.id}">Approve</button>
-            <button class="btn-reject"  data-reject-req="${r.id}">Reject</button>
-          </div>
-        </div>`}).join('')}
-    </div>
-  ` : '';
-
-  userTable.innerHTML = `
-    <h4 style="margin:0 0 6px;font-family:Poppins,sans-serif;color:#0f172a">Users</h4>
-    <div class="table">${rowsUsers}</div>
-    ${rowsReqs}
-  `;
-
-  // Wire user actions
-  userTable.querySelectorAll('[data-approve]').forEach(b=> b.onclick=async ()=>{
-    const id=b.getAttribute('data-approve'); const u=store.users.find(x=>x.id===id); if(!u) return;
-    u.status='approved'; if(u.role==='viewer') u.role='contributor'; await saveUsers();
-    await addLog('User approved', u.email, m); renderUserTable(); refreshUI();
-  });
-  userTable.querySelectorAll('[data-reject]').forEach(b=> b.onclick=async ()=>{
-    const id=b.getAttribute('data-reject'); store.users = store.users.filter(x=>x.id!==id); await saveUsers();
-    await addLog('User rejected/removed', id, m); renderUserTable(); refreshUI();
-  });
-  userTable.querySelectorAll('[data-remove]').forEach(b=> b.onclick=async ()=>{
-    const id=b.getAttribute('data-remove'); const u=store.users.find(x=>x.id===id);
-    store.users = store.users.filter(x=>x.id!==id); await saveUsers();
-    await addLog('User removed', u?.email||id, m); renderUserTable();
-    if(currentUser()?.id===id){ clearSession(); refreshUI(); }
-  });
-  userTable.querySelectorAll('select[data-id]').forEach(sel=> sel.onchange=async ()=>{
-    const id=sel.getAttribute('data-id'); const u=store.users.find(x=>x.id===id); if(!u) return;
-    const prev=u.role; u.role=sel.value; await saveUsers();
-    await addLog('Role changed', `${u.email}: ${prev} → ${u.role}`, m); refreshUI();
-  });
-
-  // Wire request approvals
-  userTable.querySelectorAll('[data-approve-req]').forEach(b=> b.onclick=async ()=>{
-    const rid=b.getAttribute('data-approve-req'); const r=store.requests.find(x=>x.id===rid); if(!r) return;
-    r.status='approved';
-    const u=store.users.find(x=>x.id===r.userId); if(u){ u.role=r.targetRole; u.status='approved'; await saveUsers(); }
-    await saveRequests(); await addLog('Role request approved', `${u?.email||''} → ${r.targetRole}`, m);
-    renderUserTable(); refreshUI();
-  });
-  userTable.querySelectorAll('[data-reject-req]').forEach(b=> b.onclick=async ()=>{
-    const rid=b.getAttribute('data-reject-req'); const r=store.requests.find(x=>x.id===rid); if(!r) return;
-    r.status='rejected'; await saveRequests(); await addLog('Role request rejected', `req:${rid}`, m);
-    renderUserTable();
-  });
-}
-
-/* ================== ACCORDION & UI ================== */
-function setupAccordion(){
-  document.querySelectorAll('.acc-header').forEach(h=>{
-    h.addEventListener('click', ()=>{
-      const item = h.parentElement;
-      const isOpen = item.classList.contains('open');
-      document.querySelectorAll('.acc-item').forEach(i=>i.classList.remove('open'));
-      if(!isOpen) item.classList.add('open');
-      h.setAttribute('aria-expanded', String(!isOpen));
     });
-    h.addEventListener('keydown', (e)=>{
-      if(e.key==='Enter' || e.key===' '){ e.preventDefault(); h.click(); }
+
+    // Auth Modal Links
+    authClose.addEventListener('click', e => { e.preventDefault(); closeAuth(); });
+    if(document.getElementById('gateSignIn')) document.getElementById('gateSignIn').addEventListener('click', () => openAuth('signin'));
+    if(document.getElementById('gateSignUp')) document.getElementById('gateSignUp').addEventListener('click', () => openAuth('signup'));
+    if (miSignIn) miSignIn.addEventListener('click', () => { openAuth('signin'); userMenu.classList.remove('show'); });
+    if (miSignUp) miSignUp.addEventListener('click', () => { openAuth('signup'); userMenu.classList.remove('show'); });
+
+    // Ensure the submit handler is attached to the form
+    authForm.addEventListener('submit', handleAuthSubmit);
+
+    const handleLogout = async (e) => {
+        if (e) e.preventDefault();
+        const u = currentUser();
+        clearSession();
+        await addLog('Sign out', 'Success', u || undefined);
+        refreshUI();
+        if (userMenu) userMenu.classList.remove('show');
+    };
+
+    if (miLogout) miLogout.addEventListener('click', handleLogout);
+    if (userLogout) userLogout.addEventListener('click', handleLogout);
+
+    // VM Control Buttons
+    if(btnStart) btnStart.onclick = startVM; 
+    if(btnStop) btnStop.onclick = stopVM; 
+    if(btnAccessTroubleshoot) btnAccessTroubleshoot.onclick = requestTroubleshootAccess; 
+    if(btnCheck) btnCheck.onclick = checkStatusNow;
+
+    // Accordion Toggle
+    document.querySelectorAll('.acc-header').forEach(h => {
+        h.addEventListener('click', () => {
+            const item = h.parentElement;
+            const open = item.classList.contains('open');
+            item.classList.toggle('open', !open);
+            h.setAttribute('aria-expanded', String(!open));
+        });
     });
-  });
-}
-function refreshAvatar(){
-  const u = currentUser();
-  avatar.textContent = initials(u ? (u.name || u.email) : 'Uzima');
-  menuName.textContent = u ? `${u.name||u.email} · ${u.role}${u.status!=='approved'?' (pending)':''}` : 'Not signed in';
-  miProfile.style.display = u ? '' : 'none';
-  miLogout.style.display  = u ? '' : 'none';
-}
-function setUserLine(){
-  const u = currentUser();
-  if(!u){
-    userLineText.textContent='Not signed in';
-    userLineSep.style.display='none';
-    userLogoutLink.style.display='none';
-  }else{
-    userLineText.textContent = `${u.name||u.email} · ${u.role}`;
-    userLineSep.style.display='';
-    userLogoutLink.style.display='';
-  }
-}
-userLogoutLink.addEventListener('click', async (e)=>{
-  e.preventDefault(); const u=currentUser(); clearSession(); await addLog('Sign out','Success', u||undefined); refreshUI();
+
+    // --- 3. Initial Render ---
+    refreshUI();
+    document.getElementById('rawLog').textContent = "Activity logs will appear here..."; 
 });
-function setStatusFromStore(){
-  const st = store.state.state || 'stopped';
-  const last = store.state.lastChange || 0;
-  const fresh = (Date.now()-last) < FRESH_WINDOW;
-  const final = (st==='running' && fresh) ? 'running' : 'stopped';
-  if(final==='running') setStatusUI('running','VM is running');
-  else setStatusUI('stopped','VM is stopped');
-}
-function renderAll(){
-  renderLogs();
-  setUserLine();
-  refreshAvatar();
-  renderUserTable();
-  setStatusFromStore();
-}
-/* Compatibility wrapper so older calls still work */
-function refreshUI(){ renderAll(); }
-
-function setupMenuShortcuts(){
-  document.addEventListener('keydown', (e)=>{
-    if(e.key==='Escape'){ authModal.classList.remove('show'); profileModal.classList.remove('show'); }
-  });
-}
-
-/* ================== INIT ================== */
-(async function init(){
-  setupAccordion();
-  setupMenuShortcuts();
-  await loadAll();
-  renderAll();
-})();
 </script>
 </body>
 </html>
